@@ -2,25 +2,45 @@
 
 type disposable;
 
-type position;
-type selection;
+module Position = {
+  type t = {
+    character: int,
+    line: int,
+  };
+
+  [@bs.module "vscode"] [@bs.new]
+  external make: (~line: int, ~character: int) => t = "Position";
+  [@bs.get] external character: t => int = "character";
+  [@bs.get] external line: t => int = "line";
+};
+
+module Selection = {
+  type t = {
+    active: Position.t,
+    anchor: Position.t,
+    [@bs.as "end"]
+    end_: Position.t,
+    isEmpty: bool,
+    isReversed: bool,
+    isSingleLine: bool,
+    start: Position.t,
+  };
+
+  [@bs.module "vscode"] [@bs.new]
+  external make: (~anchor: Position.t, ~active: Position.t) => t = "Selection";
+  [@bs.get] external anchor: t => Position.t = "anchor";
+  [@bs.get] external active: t => Position.t = "active";
+  [@bs.get] external start: t => Position.t = "start";
+  [@bs.get] external end_: t => Position.t = "end";
+};
 
 type range = {
-  start: position,
+  start: Position.t,
   [@bs.as "end"]
-  end_: position,
+  end_: Position.t,
 };
 
-type uri = {toString: (. unit) => string};
-type textDocument = {
-  uri,
-  fileName: string,
-};
 type textCommandArgs = {text: option(string)};
-type textEditor = {
-  document: textDocument,
-  selection,
-};
 
 type extension_context = {subscriptions: array(disposable)};
 
@@ -29,10 +49,6 @@ type textDocumentContentChangeEvent = {
   rangeLength: int,
   rangeOffset: int,
   text: string,
-};
-type textDocumentChangeEvent = {
-  contentChanges: array(textDocumentContentChangeEvent),
-  document: textDocument,
 };
 
 module Commands = {
@@ -46,8 +62,41 @@ module Commands = {
     (command, arg) => vscode##commands##executeCommand(command, arg);
 };
 
+module Uri = {
+  type t = {toString: (. unit) => string};
+};
+
+module TextLine = {
+  type t = {
+    text: string,
+    isEmptyOrWhitespace: bool,
+    lineNumber: int,
+    range,
+    rangeIncludingLineBreak: range,
+    firstNonWhitespaceCharacterIndex: int,
+  };
+};
+
+module TextDocument = {
+  type t = {
+    uri: Uri.t,
+    fileName: string,
+    lineAt: int => TextLine.t,
+  };
+};
+
+module TextDocumentChangeEvent = {
+  type t = {
+    contentChanges: array(textDocumentContentChangeEvent),
+    document: TextDocument.t,
+  };
+};
+
 module TextEditor = {
-  type t = textEditor;
+  type t = {
+    document: TextDocument.t,
+    selection: Selection.t,
+  };
 
   [@bs.deriving jsConverter]
   type cursorStyle =
@@ -63,18 +112,20 @@ module TextEditor = {
   let options: unit => option(textEditorOptions) =
     () => Js.toOption(vscode##window##activeTextEditor##options);
 
-  let document: unit => option(textDocument) =
+  let document: unit => option(TextDocument.t) =
     () => Js.toOption(vscode##window##activeTextEditor##document);
 
-  [@bs.set] external setSelection: (t, selection) => unit = "selection";
+  [@bs.get] external getSelection: t => Selection.t = "selection";
+  [@bs.set] external setSelection: (t, Selection.t) => unit = "selection";
+  [@bs.get] external getSelections: t => array(Selection.t) = "selections";
   [@bs.set]
-  external setSelections: (t, array(selection)) => unit = "selections";
+  external setSelections: (t, array(Selection.t)) => unit = "selections";
 };
 
 module Window = {
   type event('a) = option('a);
 
-  let activeTextEditor: unit => option(textEditor) =
+  let activeTextEditor: unit => option(TextEditor.t) =
     () => Js.toOption(vscode##window##activeTextEditor);
 
   let showError: string => unit =
@@ -85,28 +136,8 @@ module Window = {
 };
 
 module Workspace = {
-  let onDidChangeTextDocument: (textDocumentChangeEvent => unit) => unit =
+  let onDidChangeTextDocument: (TextDocumentChangeEvent.t => unit) => unit =
     event => vscode##workspace##onDidChangeTextDocument(event);
-};
-
-module Position = {
-  type t = position;
-
-  [@bs.module "vscode"] [@bs.new]
-  external make: (~line: int, ~character: int) => t = "Position";
-  [@bs.get] external character: t => int = "character";
-  [@bs.get] external line: t => int = "line";
-};
-
-module Selection = {
-  type t = selection;
-
-  [@bs.module "vscode"] [@bs.new]
-  external make: (~anchor: position, ~active: position) => t = "Selection";
-  [@bs.get] external anchor: t => position = "anchor";
-  [@bs.get] external active: t => position = "active";
-  [@bs.get] external start: t => position = "start";
-  [@bs.get] external end_: t => position = "end";
 };
 
 let overrideCommand = (context, command, callback) => {

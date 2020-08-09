@@ -14,10 +14,14 @@
 		"in-source": true
 	},
 	"bs-dependencies": [
-		"@glennsl/bs-json"
+		"tablecloth-bucklescript"
 	],
 	"bs-dev-dependencies": [
 		"@glennsl/bs-jest"
 	],
-	"suffix": ".bs.js"
+	"suffix": ".bs.js",
+	"bsc-flags": [
+		"-open",
+		"Tablecloth"
+	]
 }

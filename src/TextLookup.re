@@ -6,7 +6,10 @@ module LookupError = {
 
 let characterTypeAt = (text, index) =>
   index >= 0 && index < text->String.length
-    ? Ok(text->String.sub(index, 1)->CharacterType.characterType)
+    ? text
+      |> String.slice(~from=index, ~to_=index + 1)
+      |> CharacterType.characterType
+      |> Result.ok
     : Error(LookupError.InvalidIndex);
 
 let rec findNextNotOfType = (text, characterType, index) =>
@@ -34,41 +37,35 @@ let findPreviousNotOfWhitespace = (text, index) =>
   text->findPreviousNotOfType(CharacterType.Whitespace, index);
 
 let findWordEnd = (text, index) =>
-  text
-  ->characterTypeAt(index)
-  ->Belt.Result.flatMap(t => text->findNextNotOfType(t, index))
-  ->Belt.Result.map(i => i - 1)
-  ->Belt.Result.getWithDefault(text->String.length - 1);
+  text->characterTypeAt(index)
+  |> Result.andThen(~f=t => text->findNextNotOfType(t, index))
+  |> Result.map(~f=i => i - 1)
+  |> Result.unwrap(~default=text->String.length - 1);
 
 let findWordStart = (text, index) =>
-  text
-  ->characterTypeAt(index)
-  ->Belt.Result.flatMap(t => text->findPreviousNotOfType(t, index))
-  ->Belt.Result.map(i => i + 1)
-  ->Belt.Result.getWithDefault(0);
+  text->characterTypeAt(index)
+  |> Result.andThen(~f=t => text->findPreviousNotOfType(t, index))
+  |> Result.map(~f=i => i + 1)
+  |> Result.unwrap(~default=0);
 
 let findNextWordStart = (text, index) =>
-  text
-  ->characterTypeAt(index)
-  ->Belt.Result.flatMap(t => text->findNextNotOfType(t, index))
-  ->Belt.Result.flatMap(i => text->findNextNotOfWhitespace(i));
+  text->characterTypeAt(index)
+  |> Result.andThen(~f=t => text->findNextNotOfType(t, index))
+  |> Result.andThen(~f=i => text->findNextNotOfWhitespace(i));
 
 let findNextWordEnd = (text, index) =>
-  text
-  ->characterTypeAt(index)
-  ->Belt.Result.flatMap(t => text->findNextNotOfType(t, index))
-  ->Belt.Result.flatMap(i => text->findNextNotOfWhitespace(i))
-  ->Belt.Result.map(i => text->findWordEnd(i));
+  text->characterTypeAt(index)
+  |> Result.andThen(~f=t => text->findNextNotOfType(t, index))
+  |> Result.andThen(~f=i => text->findNextNotOfWhitespace(i))
+  |> Result.map(~f=i => text->findWordEnd(i));
 
 let findPreviousWordStart = (text, index) =>
-  text
-  ->characterTypeAt(index)
-  ->Belt.Result.flatMap(t => text->findPreviousNotOfType(t, index))
-  ->Belt.Result.flatMap(i => text->findPreviousNotOfWhitespace(i))
-  ->Belt.Result.map(i => text->findWordStart(i));
+  text->characterTypeAt(index)
+  |> Result.andThen(~f=t => text->findPreviousNotOfType(t, index))
+  |> Result.andThen(~f=i => text->findPreviousNotOfWhitespace(i))
+  |> Result.map(~f=i => text->findWordStart(i));
 
 let findPreviousWordEnd = (text, index) =>
-  text
-  ->characterTypeAt(index)
-  ->Belt.Result.flatMap(t => text->findPreviousNotOfType(t, index))
-  ->Belt.Result.flatMap(i => text->findPreviousNotOfWhitespace(i));
+  text->characterTypeAt(index)
+  |> Result.andThen(~f=t => text->findPreviousNotOfType(t, index))
+  |> Result.andThen(~f=i => text->findPreviousNotOfWhitespace(i));
