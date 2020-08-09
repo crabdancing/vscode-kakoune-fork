@@ -1,13 +1,29 @@
 let selectNextWord =
     (textLine: Vscode.TextLine.t, currentSelection: Vscode.Selection.t) => {
-  [
+  let nextWordStartPosition =
     textLine.text
-    ->TextLookup.findNextWordStart(currentSelection.active.character),
+    ->TextLookup.findNextWordStart(currentSelection.active.character)
+    |> Result.map(~f=i =>
+         Vscode.Position.make(
+           ~line=currentSelection.active.line,
+           ~character=i,
+         )
+       );
+
+  let nextWordEndPosition =
     textLine.text
-    ->TextLookup.findNextWordEnd(currentSelection.active.character),
-  ]
-  |> Result.values
-  |> Result.map(~f=r => r->Js.log);
+    ->TextLookup.findNextWordEnd(currentSelection.active.character)
+    |> Result.map(~f=i =>
+         Vscode.Position.make(
+           ~line=currentSelection.active.line,
+           ~character=i,
+         )
+       );
+
+  Result.both(nextWordStartPosition, nextWordEndPosition)
+  |> Result.map(~f=((startPos, endPos)) =>
+       Vscode.Selection.make(~anchor=startPos, ~active=endPos)
+     );
 };
 
 let onType = (args: Vscode.textCommandArgs) => {
@@ -19,8 +35,12 @@ let onType = (args: Vscode.textCommandArgs) => {
        selectNextWord(e.document.lineAt(s.active.line), s)
      )
   |> Option.unwrap(~default=Error(TextLookup.LookupError.NotFound))
-  |> Result.map(~f=nextWordSelection => nextWordSelection->Js.log)
-  |> ignore;
+  |> Result.tap(~f=nextWordSelection =>
+       Vscode.Window.activeTextEditor()
+       |> Option.tap(~f=e =>
+            Vscode.TextEditor.setSelection(e, nextWordSelection)
+          )
+     );
 };
 
 let activate = context => {
