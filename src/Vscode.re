@@ -128,71 +128,8 @@ let overrideCommand = (context, command, callback) => {
   ->ignore;
 };
 
-let overrideTypeCommand = (context, writeToKak) => {
-  overrideCommand(
-    context,
-    "type",
-    args => {
-      Js.log("typing: ");
-      Js.log(args);
-      Mode.Insert === Mode.getMode()
-        ? ()
-        : (
-          switch (args.text) {
-          | Some(t) =>
-            t->Rpc.createKeysMessage->Rpc.stringifyMessage->writeToKak
-          | None => ()
-          }
-        );
-    },
-  );
-};
-
-let registerWindowChangeEventHandler = writeToKak => {
-  Window.onDidChangeActiveTextEditor(event => {
-    switch (event) {
-    | None => ()
-    | Some(e) =>
-      Rpc.createKeysMessage(":e " ++ e.document.fileName ++ "<ret>")
-      ->Rpc.stringifyMessage
-      ->writeToKak
-    }
-  });
-};
-
-let registerTextDocumentContentChangeEventHandler = writeToKak => {
-  let extractTextFromEvent = change => {
-    change.text
-    |> (
-      /* Remove replaced characters */
-      text =>
-        change.rangeLength > 0
-          ? Js.String.sliceToEnd(~from=change.rangeLength, text) : text
-    )
-    |> (
-      /* Move inside auto-closed structures */
-      text =>
-        Js.Re.test_([%re "/^[\{\[<\('\"][\"'\)>\]\}]/"], text)
-        || Js.Re.test_([%re "/\\n\s+\\n/"], text)
-          ? text ++ "<left>" : text
-    )
-    /* Move right for every replaced character */
-    |> (text => Js.String.repeat(change.rangeLength, "<right>") ++ text)
-    /* Replace return with the appropriate code */
-    |> Js.String.replace("\n", "<ret>");
-  };
-
-  Workspace.onDidChangeTextDocument(event => {
-    switch (Mode.getMode()) {
-    | Mode.Normal => ()
-    | Mode.Insert =>
-      event.contentChanges
-      ->Belt.Array.map(extractTextFromEvent)
-      ->Belt.Array.map(Rpc.createKeysMessage)
-      ->Belt.Array.map(Rpc.stringifyMessage)
-      ->Belt.Array.forEach(writeToKak)
-    }
-  });
+let overrideTypeCommand = (context, callback) => {
+  overrideCommand(context, "type", callback);
 };
 
 let setCursorStyle = style => {

@@ -1,7 +1,8 @@
-let activate = context => {
-  Vscode.overrideTypeCommand(context, _ => ());
-  Vscode.setCursorStyle(Vscode.TextEditor.Block);
+let onType = (args: Vscode.textCommandArgs) => {
+  args->Js.log;
+};
 
-  Vscode.registerWindowChangeEventHandler(_ => ());
-  Vscode.registerTextDocumentContentChangeEventHandler(_ => ());
+let activate = context => {
+  context->Vscode.overrideTypeCommand(onType);
+  Vscode.setCursorStyle(Vscode.TextEditor.Block);
 };

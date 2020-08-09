@@ -1,7 +1,13 @@
 {
 	"name": "kakoune-mode",
 	"sources": [
-		"src"
+		{
+			"dir": "src"
+		},
+		{
+			"dir": "__tests__",
+			"type": "dev"
+		}
 	],
 	"package-specs": {
 		"module": "commonjs",
@@ -9,6 +15,9 @@
 	},
 	"bs-dependencies": [
 		"@glennsl/bs-json"
+	],
+	"bs-dev-dependencies": [
+		"@glennsl/bs-jest"
 	],
 	"suffix": ".bs.js"
 }
