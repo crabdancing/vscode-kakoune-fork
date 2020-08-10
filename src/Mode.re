@@ -1,6 +1,8 @@
 type t =
   | Normal
-  | Insert;
+  | Insert
+  | Search
+  | Goto;
 
 let mode = ref(Normal);
 

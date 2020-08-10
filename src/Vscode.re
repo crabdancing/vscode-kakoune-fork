@@ -40,7 +40,7 @@ type range = {
   end_: Position.t,
 };
 
-type textCommandArgs = {text: option(string)};
+type textCommandArgs = {text: string};
 
 type extension_context = {subscriptions: array(disposable)};
 
@@ -141,26 +141,27 @@ module Workspace = {
 };
 
 let overrideCommand = (context, command, callback) => {
-  Commands.registerCommand(command, args => {
-    switch (TextEditor.document()) {
-    | None => ()
-    | Some(document) =>
-      switch (document.uri.toString(.), Mode.getMode()) {
-      | ("debug:input", _currentMode) =>
-        Commands.executeCommandWithArg("default:" ++ command, args)
-      | (_documentUri, Mode.Insert) =>
-        Commands.executeCommandWithArg("default:" ++ command, args);
-        callback(args);
-      | _ => callback(args)
-      }
-    }
-  })
+  Commands.registerCommand(command, callback)
   ->Js.Array.push(context.subscriptions)
   ->ignore;
 };
 
 let overrideTypeCommand = (context, callback) => {
-  overrideCommand(context, "type", callback);
+  let command = "type";
+
+  overrideCommand(context, command, args => {
+    TextEditor.document()
+    |> Option.tap(~f=(d: TextDocument.t) =>
+         switch (d.uri.toString(.), Mode.getMode()) {
+         | ("debug:input", _currentMode) =>
+           Commands.executeCommandWithArg("default:" ++ command, args)
+         | (_documentUri, Mode.Insert) =>
+           Commands.executeCommandWithArg("default:" ++ command, args);
+           callback(args);
+         | _ => callback(args)
+         }
+       )
+  });
 };
 
 let setCursorStyle = style => {

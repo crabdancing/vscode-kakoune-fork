@@ -1,45 +1,39 @@
-let selectNextWord =
-    (textLine: Vscode.TextLine.t, currentSelection: Vscode.Selection.t) => {
-  let nextWordStartPosition =
-    textLine.text
-    ->TextLookup.findNextWordStart(currentSelection.active.character)
-    |> Result.map(~f=i =>
-         Vscode.Position.make(
-           ~line=currentSelection.active.line,
-           ~character=i,
-         )
-       );
+let handleInsertMode = (_editor, _input: Vscode.textCommandArgs) => ();
+let handleSearchMode = (_editor, _input: Vscode.textCommandArgs) => ();
 
-  let nextWordEndPosition =
-    textLine.text
-    ->TextLookup.findNextWordEnd(currentSelection.active.character)
-    |> Result.map(~f=i =>
-         Vscode.Position.make(
-           ~line=currentSelection.active.line,
-           ~character=i,
-         )
-       );
+let handleGotoMode = (editor, input: Vscode.textCommandArgs) =>
+  switch (input.text) {
+  | "h" => editor |> Movements.gotoLineStart
+  | "j" => editor |> Movements.gotoFileEnd
+  | "k" => editor |> Movements.gotoFileStart
+  | "l" => editor |> Movements.gotoLineEnd
+  | _ => ()
+  };
 
-  Result.both(nextWordStartPosition, nextWordEndPosition)
-  |> Result.map(~f=((startPos, endPos)) =>
-       Vscode.Selection.make(~anchor=startPos, ~active=endPos)
-     );
-};
+let handleNormalMode = (editor, input: Vscode.textCommandArgs) =>
+  switch (input.text) {
+  | "w" => editor |> Movements.selectNextWord
+  | "b" => editor |> Movements.selectPreviousWord
+  | "h" => editor |> Movements.selectCharacterLeft
+  | "j" => editor |> Movements.selectCharacterDown
+  | "k" => editor |> Movements.selectCharacterUp
+  | "l" => editor |> Movements.selectCharacterRight
+  | "x" => editor |> Movements.selectCurrentLine
+  | "g" => Mode.setMode(Mode.Goto)
+  | _ => ()
+  };
 
 let onType = (args: Vscode.textCommandArgs) => {
   args->Js.log;
 
   Vscode.Window.activeTextEditor()
-  |> Option.map(~f=e => (e->Vscode.TextEditor.getSelection, e))
-  |> Option.map(~f=((s: Vscode.Selection.t, e: Vscode.TextEditor.t)) =>
-       selectNextWord(e.document.lineAt(s.active.line), s)
-     )
-  |> Option.unwrap(~default=Error(TextLookup.LookupError.NotFound))
-  |> Result.tap(~f=nextWordSelection =>
-       Vscode.Window.activeTextEditor()
-       |> Option.tap(~f=e =>
-            Vscode.TextEditor.setSelection(e, nextWordSelection)
-          )
+  |> Option.tap(~f=e =>
+       switch (Mode.getMode()) {
+       | Normal => args |> handleNormalMode(e) |> ignore
+       | Insert => args |> handleInsertMode(e) |> ignore
+       | Search => args |> handleSearchMode(e) |> ignore
+       | Goto => args |> handleGotoMode(e) |> ignore
+       }
      );
 };
 
