@@ -82,6 +82,7 @@ module TextDocument = {
     uri: Uri.t,
     fileName: string,
     lineAt: int => TextLine.t,
+    lineCount: int,
   };
 };
 
