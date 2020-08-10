@@ -76,12 +76,14 @@ describe("Text lookup functions", () => {
     let testInput = [
       (("hello world!", 0), Ok(6)),
       (("hello world!", 7), Ok(11)),
+      (("#include <iostream>", 0), Ok(1)),
       (("#include <iostream>", 17), Ok(18)),
+      (("#include <iostream>", 18), Ok(19)),
       (("\treturn 0;", 8), Ok(9)),
       (("    return 0;", 11), Ok(12)),
-      (("hello world!", 11), Error(TextLookup.LookupError.Overflow)),
-      (("hello world!", 12), Error(Overflow)),
-      (("hello world!", (-1)), Error(Underflow)),
+      (("hello world!", 11), Ok(12)),
+      (("hello world!", 12), Error(TextLookup.LookupError.Overflow)),
+      (("hello world!", (-1)), Error(TextLookup.LookupError.Underflow)),
     ];
 
     testAll(
@@ -135,8 +137,11 @@ describe("Text lookup functions", () => {
       (("hello world!", 11), Ok(5)),
       (("hello world!", 12), Ok(11)),
       (("hello world!", 2), Ok(0)),
-      (("hello world!", 0), Ok(0)),
-      (("hello world!", 13), Error(TextLookup.LookupError.Overflow)),
+      (("hello world!", 0), Error(TextLookup.LookupError.Underflow)),
+      (("hello world!", 13), Error(Overflow)),
+      (("    return 0;", 4), Ok(0)),
+      (("    return 0;", 2), Ok(0)),
+      (("    return 0;", 0), Error(Underflow)),
     ];
 
     testAll(
@@ -195,6 +200,9 @@ describe("Text lookup functions", () => {
       (("#include <iostream>", 19), Ok(18)),
       (("#include <iostream>", (-1)), Ok(0)),
       (("#include <iostream>", 20), Error(Overflow)),
+      (("    return 0;", 4), Ok(0)),
+      (("    return 0;", 2), Ok(0)),
+      (("    return 0;", 0), Ok(0)),
     ];
 
     testAll("findWordStart", testInput, (((text, startIndex), expected)) =>

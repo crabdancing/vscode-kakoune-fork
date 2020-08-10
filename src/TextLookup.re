@@ -99,8 +99,10 @@ let findNextWordStart = (~startIndex, text) =>
   |> Result.andThen(~f=characterType =>
        text |> findNextNotOfType(~characterType, ~startIndex)
      )
-  |> Result.andThen(~f=startIndex =>
-       text |> findNextNotOfWhitespace(~startIndex)
+  |> Result.map(~f=startIndex =>
+       text
+       |> findNextNotOfWhitespace(~startIndex)
+       |> Result.unwrap(~default=text |> String.length)
      );
 
 let findNextWordEnd = (~startIndex, text) =>
@@ -127,18 +129,12 @@ let findPreviousWordStart = (~startIndex, text) =>
 
 let findPreviousWordEnd = (~startIndex, text) =>
   text
-  |> characterTypeBefore(~startIndex)
-  |> Result.andThen(~f=characterType =>
-       text |> findPreviousNotOfType(~characterType, ~startIndex)
-     )
-  |> Result.andThen(~f=startIndex =>
-       text |> findPreviousNotOfWhitespace(~startIndex)
-     )
-  |> (
-    e =>
-      switch (e) {
-      | Error(LookupError.Underflow) => Ok(0)
-      | Ok(i) => Ok(i)
-      | Error(Overflow) => Error(LookupError.Overflow)
-      }
-  );
+  |> findWordStart(~startIndex)
+  |> Result.andThen(~f=wordStartIndex =>
+       wordStartIndex == startIndex && wordStartIndex == 0
+         ? Error(LookupError.Underflow)
+         : text
+           |> findPreviousNotOfWhitespace(~startIndex=wordStartIndex)
+           |> Result.unwrap(~default=0)
+           |> Result.ok
+     );

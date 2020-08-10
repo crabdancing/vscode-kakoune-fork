@@ -39,5 +39,5 @@ let onType = (args: Vscode.textCommandArgs) => {
 
 let activate = context => {
   context->Vscode.overrideTypeCommand(onType);
-  Vscode.setCursorStyle(Vscode.TextEditor.Block);
+  // Vscode.setCursorStyle(Vscode.TextEditor.Block);
 };
