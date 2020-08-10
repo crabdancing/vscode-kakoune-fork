@@ -1,0 +1,13 @@
+image: archlinux
+packages:
+  - nodejs
+  - npm
+sources:
+  - https://git.sr.ht/~reykjalin/vscode-kakoune
+tasks:
+  - setup: |
+      cd vscode-kakoune
+      npm ci
+  - test: |
+      cd vscode-kakoune
+      npm test
