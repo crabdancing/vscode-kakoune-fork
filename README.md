@@ -1,15 +1,10 @@
 # Kakoune mode
 
-_Issue tracking can be found at [~reykjalin/kakoune-mode](https://todo.sr.ht/~reykjalin/kakoune-mode)._
+_There is currently no issue tracking._
 
 **WARNING: This VSCode extension is still under heavy development and should only be considered ready for testing. It is _not_ ready for real use.**
 
-Kakoune mode allows you to use the text editor [Kakoune](https://kakoune.org) as the text editing driver instead of VSCode. This extension runs an instance of Kakoune in the background, passess all inputs to Kakoune and only uses VSCode to display the text file.
-While in insert mode VSCode does take care of insertion, but everything VSCode does is echoed to Kakoune.
-Once you exit insert mode, the VSCode view is synced back up with Kakoune.
-
-Because Kakoune is used in the background, user defined functions _should_ work. As an example, custom keybindings — e.g. a custom keybinding to exit insert mode — will work by simply modifying the `.config/kak/kakrc` file.
-All other custom configuration should work, at least _in theory_. Plugins might not work, depending on what kind of functionality they provide.
+`vscode-kakoune` emulates the input behavior of the [Kakoune](https://kakoune.org) text editor.
 
 # Table of Contents
 
@@ -33,13 +28,13 @@ I've been wanting to learn a functional language for a long time and while worki
 Reason allows you to compile OCaml to JavaScript, and Fable compiles F# to JavaScript.
 Both languages looked like good candidates, and at first I decided to go with F# because I liked the structure and syntax of the language more than OCaml and Reason.
 
-However, after using Fable for a bit, I felt that the documentation was [a bit lacking](https://thorlaksson.com/post/calling-fable-from-typescript), and the JavaScript interoperability, while usable, isn't great.
+However, after using Fable for a bit, I felt that the documentation was [a bit lacking](https://thorlaksson.com/post/calling-fable-from-typescript), and the JavaScript interoperability—while usable—isn't great.
 So I tried to use Reason, and I find the JavaScript interop much more user friendly and terse.
 The codebase in Reason is a bit smaller, mostly thanks to less glue code for JavaScript interop.
 
 The Reason tooling is also much better.
 The F# tooling for VSCode can feel a bit slow, often taking ~1sec to think for auto-completions and types, and you need to compile manually (or use a watcher) while developing.
-The Reason tooling is relatively fast, auto-completions come in instantly, and the toolchain is fast enough to **recompile automatically after every save**, which is an immense productivity boost.
+The Reason tooling is relatively fast, auto-completions come in instantly, and the toolchain is fast enough to **recompile automatically after every save, without needing to run a watcher**, which is an immense productivity boost.
 
 My reason for looking into these 2 frameworks is that I wanted to use a functional language for features such as pattern matching, currying, and pipes (`|>` and `->` in Reason).
 I think there are many functions that can be made simpler and smaller by using these constructs and unfortunately JavaScript isn't optimal for this; it's more difficult to write functional code in JavaScript than it is to write imperative code.
@@ -53,9 +48,6 @@ Most of this code still looks like Reason, which was not the case with F#.
 
 # Build instructions
 
-`kak` **needs** to be available in your `PATH`.
-You can find installation instructions for Kakoune in the [GitHub repository](https://github.com/mawww/kakoune#22-installing).
-
 You'll need to have `npm` or `yarn` installed.
 
 ## Script to paste into your shell of choice
@@ -67,13 +59,15 @@ npm run build
 
 # Current functionality
 
-- You can open a file.
-- Selections are fully functional.
+- Selecting the next word by pressing `w` is fully functional.
 
 # Upcoming functionality
 
-1. Sync text from Kakoune to VSCode after changes.
-1. Change every instance of selected text.
-1. Search and replace.
-1. Show pop up (Ctrl+P like menu) during search and `:` commands.
-    - Show suggestions from the Kakoune clippy in pop up.
+1. More selection commands.
+    - Extending selections.
+1. Goto commands, e.g. `gl` to go to the end of the line, `gh` to go to the start, etc.
+1. Multiple selections via search.
+1. _Edit_ multiple selections via search and replace.
+1. (Maybe) `:` commands, e.g. `:w` for saving, etc.
+    - Show pop up (Ctrl+P like menu) during search and `:` commands.
+        - Show suggestions from the Kakoune clippy in pop up.
