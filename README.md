@@ -1,5 +1,7 @@
 # Kakoune mode
 
+[![builds.sr.ht status](https://builds.sr.ht/~reykjalin/vscode-kakoune.svg)](https://builds.sr.ht/~reykjalin/vscode-kakoune?)
+
 _There is currently no issue tracking._
 
 **WARNING: This VSCode extension is still under heavy development and should only be considered ready for testing. It is _not_ ready for real use.**
