@@ -84,6 +84,10 @@ module TextDocument = {
     lineAt: int => TextLine.t,
     lineCount: int,
   };
+
+  let getTextLine = (index, document) =>
+    index >= 0 && index < document.lineCount
+      ? Some(document.lineAt(index)) : None;
 };
 
 module TextDocumentChangeEvent = {
