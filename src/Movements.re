@@ -1,8 +1,11 @@
+/**
+ * Moves the current selection to the next word.
+ */
 let selectNextWord = (editor: Vscode.TextEditor.t) => {
   let currentSelection = editor |> Vscode.TextEditor.getSelection;
 
   currentSelection
-  |> Selections.selectNextWord(
+  |> Selections.makeNextWordSelection(
        Vscode.TextDocument.getTextLine(_, editor.document),
      )
   |> Option.tap(~f=s => editor->Vscode.TextEditor.setSelection(s));
