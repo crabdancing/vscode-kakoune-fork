@@ -61,15 +61,15 @@ npm run build
 
 # Current functionality
 
-- Selecting the next word by pressing `w` is fully functional.
+- Basic movements and selections via `w`/`b`, `h`/`j`/`k`/`l`.
+- Basic goto commands via `gh`, `gj`, `gk`, `gl`.
+- Basic goto selections via `Gh`, `Gj`, `Gk`, `Gl`.
 
 # Upcoming functionality
 
-1. More selection commands.
-    - Extending selections.
-1. Goto commands, e.g. `gl` to go to the end of the line, `gh` to go to the start, etc.
-1. Multiple selections via search.
-1. _Edit_ multiple selections via search and replace.
+1. Extending selections.
+1. Multiple selections via regex search with `/`.
+1. _Edit_ multiple selections via regex search with `/`.
 1. (Maybe) `:` commands, e.g. `:w` for saving, etc.
     - Show pop up (Ctrl+P like menu) during search and `:` commands.
         - Show suggestions from the Kakoune clippy in pop up.
