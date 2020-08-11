@@ -1,16 +1,30 @@
 {
-	"name": "kakoune-mode",
+	"name": "vscode-kakoune",
 	"displayName": "Kakoune Mode",
-	"description": "Uses Kakoune as the backend while editing",
-	"version": "0.0.1",
+	"description": "Kakoune editing emulation for VSCode",
+	"repository": {
+		"type": "git",
+		"url": "https://git.sr.ht/~reykjalin/vscode-kakoune"
+	},
+	"version": "1.0.0",
+	"publisher": "reykjalin",
+	"license": "MIT",
 	"engines": {
 		"vscode": "^1.47.0"
 	},
 	"categories": [
-		"Other"
+		"Other",
+		"Keymaps"
+	],
+	"keywords": [
+		"vim",
+		"kakoune",
+		"modal editing",
+		"modal"
 	],
 	"activationEvents": [
-		"*"
+		"*",
+		"onCommand:type"
 	],
 	"main": "./src/Extension.bs.js",
 	"contributes": {},
@@ -26,11 +40,10 @@
 	},
 	"devDependencies": {
 		"@glennsl/bs-jest": "^0.5.1",
-		"bs-platform": "^7.1.1",
 		"jest": "^26.2.2"
 	},
 	"dependencies": {
-		"bs-vscode": "^0.1.0",
+		"bs-platform": "^7.1.1",
 		"tablecloth-bucklescript": "git://github.com/darklang/tablecloth#83480ad"
 	}
 }

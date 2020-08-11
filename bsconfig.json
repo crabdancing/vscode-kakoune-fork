@@ -3,10 +3,6 @@
 	"sources": [
 		{
 			"dir": "src"
-		},
-		{
-			"dir": "__tests__",
-			"type": "dev"
 		}
 	],
 	"package-specs": {

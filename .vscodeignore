@@ -1,10 +1,14 @@
+# Folders
 .vscode/**
 .vscode-test/**
-out/test/**
-src/**
+.git
+lib
+
+# Files
+.build.yml
+.editorconfig
 .gitignore
-vsc-extension-quickstart.md
-**/tsconfig.json
-**/tslint.json
-**/*.map
-**/*.ts
+.merlin
+bsconfig.json
+*.vsix
+**/*.re
