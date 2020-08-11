@@ -1,12 +1,23 @@
 let handleInsertMode = (_editor, _input: Vscode.textCommandArgs) => ();
 let handleSearchMode = (_editor, _input: Vscode.textCommandArgs) => ();
 
-let handleGotoMode = (editor, input: Vscode.textCommandArgs) => {
+let handleGotoExtendMode = (input: Vscode.textCommandArgs) => {
   switch (input.text) {
-  | "h" => editor |> Movements.gotoLineStart
-  | "j" => editor |> Movements.gotoFileEnd
-  | "k" => editor |> Movements.gotoFileStart
-  | "l" => editor |> Movements.gotoLineEnd
+  | "h" => Movements.selectToLineStart()
+  | "j" => Movements.selectToFileEnd()
+  | "k" => Movements.selectToFileStart()
+  | "l" => Movements.selectToLineEnd()
+  | _ => ()
+  };
+  Mode.setMode(Mode.Normal);
+};
+
+let handleGotoMode = (input: Vscode.textCommandArgs) => {
+  switch (input.text) {
+  | "h" => Movements.gotoLineStart()
+  | "j" => Movements.gotoFileEnd()
+  | "k" => Movements.gotoFileStart()
+  | "l" => Movements.gotoLineEnd()
   | _ => ()
   };
   Mode.setMode(Mode.Normal);
@@ -23,6 +34,7 @@ let handleNormalMode = (editor, input: Vscode.textCommandArgs) =>
   | "x" => Movements.selectCurrentLine()
   | "X" => Movements.expandLineSelection()
   | "g" => Mode.setMode(Mode.Goto)
+  | "G" => Mode.setMode(Mode.GotoExtend)
   | _ => ()
   };
 
@@ -35,7 +47,8 @@ let onType = (args: Vscode.textCommandArgs) => {
        | Normal => args |> handleNormalMode(e) |> ignore
        | Insert => args |> handleInsertMode(e) |> ignore
        | Search => args |> handleSearchMode(e) |> ignore
-       | Goto => args |> handleGotoMode(e) |> ignore
+       | Goto => args |> handleGotoMode |> ignore
+       | GotoExtend => args |> handleGotoExtendMode |> ignore
        }
      );
 };

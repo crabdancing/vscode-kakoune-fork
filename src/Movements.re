@@ -44,7 +44,12 @@ let selectCurrentLine = () => {
   expandLineSelection();
 };
 
-let gotoLineStart = (_editor: Vscode.TextEditor.t) => ();
-let gotoLineEnd = (_editor: Vscode.TextEditor.t) => ();
-let gotoFileStart = (_editor: Vscode.TextEditor.t) => ();
-let gotoFileEnd = (_editor: Vscode.TextEditor.t) => ();
+let gotoLineStart = () => Vscode.Commands.moveCursorLineStart();
+let gotoLineEnd = () => Vscode.Commands.moveCursorLineEnd();
+let gotoFileStart = () => Vscode.Commands.moveCursorTop();
+let gotoFileEnd = () => Vscode.Commands.moveCursorBottom();
+
+let selectToLineStart = () => Vscode.Commands.selectToLineStart();
+let selectToLineEnd = () => Vscode.Commands.selectToLineEnd();
+let selectToFileStart = () => Vscode.Commands.selectToTop();
+let selectToFileEnd = () => Vscode.Commands.selectToBottom();

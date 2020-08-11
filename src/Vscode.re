@@ -110,6 +110,16 @@ module Commands = {
   let moveLineUp = () =>
     CursorMoveArguments.make(~to_="up", ~by="line", ())
     |> executeCursorMoveCommand;
+
+  let moveCursorLineStart = () => "cursorLineStart" |> executeCommand;
+  let moveCursorLineEnd = () => "cursorLineEnd" |> executeCommand;
+  let selectToLineStart = () => "cursorLineStartSelect" |> executeCommand;
+  let selectToLineEnd = () => "cursorLineEndSelect" |> executeCommand;
+
+  let moveCursorTop = () => "cursorTop" |> executeCommand;
+  let moveCursorBottom = () => "cursorBottom" |> executeCommand;
+  let selectToTop = () => "cursorTopSelect" |> executeCommand;
+  let selectToBottom = () => "cursorBottomSelect" |> executeCommand;
 };
 
 module Uri = {

@@ -2,7 +2,8 @@ type t =
   | Normal
   | Insert
   | Search
-  | Goto;
+  | Goto
+  | GotoExtend;
 
 let mode = ref(Normal);
 
