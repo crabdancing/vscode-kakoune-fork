@@ -105,70 +105,69 @@ let findPreviousNotOfWhitespace = (~startIndex, text) =>
      );
 
 /**
- * Finds the index of the end of the word currently under the cursor location
- * as specified by `startIndex`.
- *
- * Returns Ok(int) when found, Error(LookupError.Underflow) otherwise.
- */
-let findWordEnd = (~startIndex, text) => {
-  // The index of the first next character that has a different type from the one
-  // currently under the cursor is the end of the word.
-  text
-  |> characterTypeAfter(~startIndex)
-  |> Result.andThen(~f=characterType =>
-       text |> findNextNotOfType(~characterType, ~startIndex)
-     )
-  |> (
-    // If we Overflowed during the search we know that the end of the word is
-    // the same as the end of the string, as such we can't actually Overflow.
-    endIndex =>
-      switch (endIndex) {
-      | Error(LookupError.Overflow) => text |> String.length |> Result.ok
-      | Error(Underflow) => Error(LookupError.Underflow)
-      | Ok(i) => Ok(i)
-      }
-  );
-};
-
-/**
  * Finds the index of the start of the word currently under the cursor location
  * as specified by `startIndex`.
  *
- * Returns Ok(int) when found, Error(LookupError.Underflow) otherwise.
+ * The current word is defined as the word /ending/ at the current cursor location,
+ * i.e. the word is to the left of (before) the current cursor location.
+ *
+ * Returns Ok(int) when found, Error(LookupError.t) otherwise.
  */
 let findWordStart = (~startIndex, text) => {
-  // 1. Find the first previous character that doesn't share the currenct character's type.
-  // 2. If Underflow and started searching from 0 => Ok(0)
+  /**
+   * When looking for the start of a word that is not made up of whitespaces and
+   * we underflow there are 2 possibilities:
+   *   1. We started searching at the start of the string, in which case we underflow.
+   *   2. We've /reached/ the start of the string, in which case we return 0 (start of the string).
+   *
+   * If we overflow that's an error.
+   *
+   * If we find a valid index that's the start of the word.
+   *
+   * Returns Ok(int) or Error(LookupError.t)
+   */
+  let findStartOfNonWhitespaceWord = (~startIndex) =>
+    Result.andThen(~f=characterType => {
+      switch (text |> findPreviousNotOfType(~characterType, ~startIndex)) {
+      | Error(LookupError.Underflow) =>
+        startIndex > 0 ? Ok(0) : Error(LookupError.Underflow)
+      | Error(Overflow) => Error(Overflow)
+      | Ok(i) => Ok(i)
+      }
+    });
+
+  /**
+   * When looking for the start of a word that is made up of whitespaces and
+   * we underflow there are 2 possibilities:
+   *   1. We started searching at the start of the string, in which case we underflow.
+   *   2. We've /reached/ the start of the string, in which case we return 0 (start of the string).
+   *
+   * If we overflow that's an error.
+   *
+   * If we reach a valid non-whitespace character we then find the start of that word and return
+   * the result from that search.
+   *
+   * Returns Ok(int) or Error(LookupError.t)
+   */
+  let findStartOfWhitespaceWord = (~startIndex) =>
+    switch (text |> findPreviousNotOfWhitespace(~startIndex)) {
+    | Error(LookupError.Underflow) =>
+      startIndex > 0 ? Ok(0) : Error(LookupError.Underflow)
+    | Error(Overflow) => Error(Overflow)
+    | Ok(i) =>
+      text
+      |> characterTypeBefore(~startIndex=i)
+      |> findStartOfNonWhitespaceWord(~startIndex=i)
+    };
+
   text
   |> characterTypeBefore(~startIndex)
   |> Result.andThen(~f=characterType =>
        characterType != CharacterType.Whitespace
-         ? switch (text |> findPreviousNotOfType(~characterType, ~startIndex)) {
-           | Error(LookupError.Underflow) =>
-             startIndex > 0 ? Ok(0) : Error(LookupError.Underflow)
-           | Error(Overflow) => Error(Overflow)
-           | Ok(i) => Ok(i)
-           }
-         : {
-           switch (text |> findPreviousNotOfWhitespace(~startIndex)) {
-           | Error(LookupError.Underflow) =>
-             startIndex > 0 ? Ok(0) : Error(LookupError.Underflow)
-           | Error(Overflow) => Error(Overflow)
-           | Ok(i) =>
-             text
-             |> characterTypeBefore(~startIndex=i)
-             |> Result.andThen(~f=characterType =>
-                  switch (
-                    text
-                    |> findPreviousNotOfType(~characterType, ~startIndex=i)
-                  ) {
-                  | Error(LookupError.Underflow) => Ok(0)
-                  | Error(Overflow) => Error(LookupError.Overflow)
-                  | Ok(i) => Ok(i)
-                  }
-                )
-           };
-         }
+         ? characterType
+           |> Result.ok
+           |> findStartOfNonWhitespaceWord(~startIndex)
+         : findStartOfWhitespaceWord(~startIndex)
      );
 };
 
@@ -194,50 +193,5 @@ let findNextWordStart = (~startIndex, text) => {
        text
        |> findNextNotOfWhitespace(~startIndex)
        |> Result.unwrap(~default=text |> String.length)
-     });
-};
-
-/**
- * Finds the index of the end of the next word, counted from the word currently
- * under the cursor location specified by `startIndex`.
- *
- * Returns Ok(int) when found, Error(LookupError.t) otherwise.
- */
-let findNextWordEnd = (~startIndex, text) => {
-  // 1. Find the next character that doesn't share the current character's type.
-  // 2. Find the next character that isn't a whitespace.
-  // 3. Find the end of the word starting from the index retrieved in 2.
-  text
-  |> characterTypeAfter(~startIndex)
-  |> Result.andThen(~f=characterType =>
-       text |> findNextNotOfType(~characterType, ~startIndex)
-     )
-  |> Result.andThen(~f=startIndex =>
-       text |> findNextNotOfWhitespace(~startIndex)
-     )
-  |> Result.andThen(~f=startIndex => text |> findWordEnd(~startIndex));
-};
-
-/**
- * Finds the index of the end of the previous word, counted from the word currently
- * under the cursor location specified by `startIndex`.
- *
- * Returns Ok(int) when found, Error(LookupError.t) otherwise.
- */
-let findPreviousWordEnd = (~startIndex, text) => {
-  // 1. Find the start of the word currently under the cursor.
-  // 2. Find the previous character that isn't a whitespace.
-  text
-  |> findWordStart(~startIndex)
-  |> Result.andThen(~f=wordStartIndex => {
-       // If we were already at the start of the word, and that word was at the
-       // beginning of the line, we're about to underflow, otherwise we can safely
-       // find a previous character that isn't a whitespace.
-       wordStartIndex == startIndex && wordStartIndex == 0
-         ? Error(LookupError.Underflow)
-         : text
-           |> findPreviousNotOfWhitespace(~startIndex=wordStartIndex)
-           |> Result.unwrap(~default=0)
-           |> Result.ok
      });
 };

@@ -95,68 +95,6 @@ describe("Text lookup functions", () => {
     );
   });
 
-  describe("findNextWordEnd", () => {
-    let testInput = [
-      (("hello world!", 0), Ok(11)),
-      (("hello world!", 7), Ok(12)),
-      (("hello world!", 11), Error(TextLookup.LookupError.Overflow)),
-      (("hello world!", 12), Error(Overflow)),
-      (("hello world!", (-1)), Error(Underflow)),
-    ];
-
-    testAll("findNextWordEnd", testInput, (((text, startIndex), expected)) =>
-      text
-      |> TextLookup.findNextWordEnd(~startIndex)
-      |> expect
-      |> toEqual(expected)
-    );
-  });
-
-  describe("findPreviousWordEnd", () => {
-    let testInput = [
-      (("hello world!", 9), Ok(5)),
-      (("hello world!", 11), Ok(5)),
-      (("hello world!", 12), Ok(11)),
-      (("hello world!", 2), Ok(0)),
-      (("hello world!", 0), Error(TextLookup.LookupError.Underflow)),
-      (("hello world!", 13), Error(Overflow)),
-      (("    return 0;", 4), Ok(0)),
-      (("    return 0;", 2), Ok(0)),
-      (("    return 0;", 0), Error(Underflow)),
-    ];
-
-    testAll(
-      "findPreviousWordEnd", testInput, (((text, startIndex), expected)) =>
-      text
-      |> TextLookup.findPreviousWordEnd(~startIndex)
-      |> expect
-      |> toEqual(expected)
-    );
-  });
-
-  describe("findWordEnd", () => {
-    let testInput = [
-      (("hello world!", 0), Ok(5)),
-      (("hello world!", 7), Ok(11)),
-      (("hello", 2), Ok(5)),
-      (("#include <iostream>", 17), Ok(18)),
-      (("#include <iostream>", 18), Ok(19)),
-      (("#include <iostream>", 19), Ok(19)),
-      (("#include <iostream>", 20), Ok(19)),
-      (
-        ("#include <iostream>", (-1)),
-        Error(TextLookup.LookupError.Underflow),
-      ),
-    ];
-
-    testAll("findWordEnd", testInput, (((text, startIndex), expected)) => {
-      text
-      |> TextLookup.findWordEnd(~startIndex)
-      |> expect
-      |> toEqual(expected)
-    });
-  });
-
   describe("findWordStart", () => {
     let testInput = [
       (("hello world!", 2), Ok(0)),
