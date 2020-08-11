@@ -29,18 +29,24 @@ let handleNormalMode = (input: Vscode.textCommandArgs) =>
   | "W" => Movements.extendNextWord()
   | "b" => Movements.selectPreviousWord()
   | "B" => Movements.extendPreviousWord()
-  | "h" => Movements.selectCharacterLeft()
+  | "h" => Movements.moveCharacterLeft()
   | "H" => Movements.extendCharacterLeft()
   | "j" => Movements.moveLineDown()
   | "J" => Movements.extendLineDown()
   | "k" => Movements.moveLineUp()
   | "K" => Movements.extendLineUp()
-  | "l" => Movements.selectCharacterRight()
+  | "l" => Movements.moveCharacterRight()
   | "L" => Movements.extendCharacterRight()
   | "x" => Movements.selectCurrentLine()
   | "X" => Movements.expandLineSelection()
   | "g" => Mode.setMode(Mode.Goto)
   | "G" => Mode.setMode(Mode.GotoExtend)
+  | "d" => Edits.deleteSelections()
+  | "p" => Edits.paste()
+  | "P" => Edits.clearSelectionsAndPaste()
+  | "c" =>
+    Edits.deleteSelections();
+    Mode.setMode(Mode.Insert);
   | _ => ()
   };
 
@@ -50,11 +56,11 @@ let onType = (args: Vscode.textCommandArgs) => {
   Vscode.Window.activeTextEditor()
   |> Option.tap(~f=e =>
        switch (Mode.getMode()) {
-       | Normal => args |> handleNormalMode |> ignore
-       | Insert => args |> handleInsertMode(e) |> ignore
-       | Search => args |> handleSearchMode(e) |> ignore
-       | Goto => args |> handleGotoMode |> ignore
-       | GotoExtend => args |> handleGotoExtendMode |> ignore
+       | Normal => args |> handleNormalMode
+       | Insert => args |> handleInsertMode(e)
+       | Search => args |> handleSearchMode(e)
+       | Goto => args |> handleGotoMode
+       | GotoExtend => args |> handleGotoExtendMode
        }
      );
 };

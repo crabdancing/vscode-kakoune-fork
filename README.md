@@ -11,11 +11,35 @@ _There is currently no issue tracking._
 # Table of Contents
 
 - [Motivation](#motivation)
+- [Differences between Kakoune and this plugin](#differences-between-kakoune-and-this-plugin)
 - [Why Reason?](#why-reason)
 - [Build Instructions](#build-instructions)
     - [Script to paste into your shell of choice](#script-to-paste-into-your-shell-of-choice)
 - [Current functionality](#current-functionality)
 - [Upcoming functionality](#upcoming-functionality)
+
+# Differences between Kakoune and this plugin
+
+The goal is not to emulate Kakoune perfectly, but to emulate Kakoune using VSCode's default-ish behaviors.
+This is mostly done to make my life easy when implementing any features; I try to use VSCode's built in movements, selections, etc. instead of implementing my own.
+Doing  has several benefits:
+
+1. The code is easier to understand.
+1. There is _way_ less code.
+1. There will be fewer bugs.
+
+Of course the downside is that VSCode will be some sort of mish-mash between Kakoune and VSCode functionality, and there **will be inconsitencies**.
+
+All of that said I'm very open to implementing some custom functionality if there is a valid reason to do so, e.g. if some very useful Kakoune feature would not work using VSCode functionality.
+
+Just to make it easier to figure out what's actually different, here's a table with the documented differences:
+
+| Command | vscode-kakoune | Kakoune |
+|--------:|:---------------|:--------|
+| `h`/`j`/`k`/`l` | Moves the _cursor_ left/down/up/right. | Selects one character left/down/up/right. |
+| `p` | Pastes over the current selections. Default VSCode behavior. | Pastes after the current selections.|
+| `P` | Clears the selections and then pastes. Cannot restore the previous selections. | Pastes before the current selections. |
+| `d` | Deletes and copies all selections. If there are no selections, deletes and copies the current lines. | Deletes all selections, but only copies the first. |
 
 # Motivation
 

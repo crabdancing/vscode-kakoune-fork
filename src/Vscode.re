@@ -116,6 +116,9 @@ module Commands = {
 
   let selectWordStartLeft = () =>
     "cursorWordStartLeftSelect" |> executeCommand;
+
+  let cut = () => "editor.action.clipboardCutAction" |> executeCommand;
+  let paste = () => "editor.action.clipboardPasteAction" |> executeCommand;
 };
 
 module Uri = {

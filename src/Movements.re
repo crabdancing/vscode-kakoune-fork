@@ -13,16 +13,10 @@ let selectPreviousWord = () => {
 };
 let extendPreviousWord = () => Vscode.Commands.selectWordStartLeft();
 
-let selectCharacterLeft = () => {
-  Vscode.Commands.cancelSelection();
-  Vscode.Commands.selectCharacterLeft();
-};
+let moveCharacterLeft = () => Vscode.Commands.moveCharacterLeft();
 let extendCharacterLeft = () => Vscode.Commands.selectCharacterLeft();
 
-let selectCharacterRight = () => {
-  Vscode.Commands.cancelSelection();
-  Vscode.Commands.selectCharacterRight();
-};
+let moveCharacterRight = () => Vscode.Commands.moveCharacterRight();
 let extendCharacterRight = () => Vscode.Commands.selectCharacterRight();
 
 let moveLineDown = () => Vscode.Commands.moveLineDown();
