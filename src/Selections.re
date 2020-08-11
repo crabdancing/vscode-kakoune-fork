@@ -93,3 +93,82 @@ let rec makePreviousWordSelection =
        )
      });
 };
+
+/**
+ * Returns a VSCode selection that starts from where the active cursor is, and ends
+ * at the start of the next character.
+ */
+let rec makeNextCharacterSelection =
+        (
+          getTextLine: int => option(Vscode.TextLine.t),
+          currentSelection: Vscode.Selection.t,
+        ) => {
+  let {active}: Vscode.Selection.t = currentSelection;
+  let newAnchor = active;
+
+  switch (newAnchor.line |> getTextLine) {
+  | None => None
+  | Some(l) =>
+    let newCharacterIndex = active.character + 1;
+    newCharacterIndex > (l.text |> String.length)
+      ? {
+        let newPos =
+          Vscode.Position.make(~line=newAnchor.line + 1, ~character=0);
+        Vscode.Selection.make(~anchor=newPos, ~active=newPos)
+        |> makeNextCharacterSelection(getTextLine);
+      }
+      : {
+        let newActive =
+          Vscode.Position.make(
+            ~line=newAnchor.line,
+            ~character=newCharacterIndex,
+          );
+        Vscode.Selection.make(~anchor=newAnchor, ~active=newActive)
+        |> Option.some;
+      };
+  };
+};
+
+/**
+ * Returns a VSCode selection that starts from where the active cursor is, and ends
+ * at the end of the previous character.
+ */
+let rec makePreviousCharacterSelection =
+        (
+          getTextLine: int => option(Vscode.TextLine.t),
+          currentSelection: Vscode.Selection.t,
+        ) => {
+  let {active}: Vscode.Selection.t = currentSelection;
+  let newAnchor = active;
+
+  switch (newAnchor.line |> getTextLine) {
+  | None => None
+  | Some(l) =>
+    let newCharacterIndex = active.character - 1;
+    newCharacterIndex < 0
+      ? {
+        let newPos =
+          Vscode.Position.make(
+            ~line=newAnchor.line - 1,
+            ~character=
+              newAnchor.line
+              - 1
+              |> getTextLine
+              |> Option.map(~f=(l: Vscode.TextLine.t) => l.text)
+              |> Option.unwrap(~default="")
+              |> String.length,
+          );
+        Vscode.Selection.make(~anchor=newPos, ~active=newPos)
+        |> makePreviousCharacterSelection(getTextLine);
+      }
+      : {
+        let newActive =
+          Vscode.Position.make(
+            ~line=newAnchor.line,
+            ~character=newCharacterIndex,
+          );
+        Vscode.Selection.make(~anchor=newAnchor, ~active=newActive)
+        |> Option.some;
+      };
+  };
+};

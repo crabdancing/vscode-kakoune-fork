@@ -17,8 +17,22 @@ let selectPreviousWord = (editor: Vscode.TextEditor.t) =>
      )
   |> Option.tap(~f=s => editor->Vscode.TextEditor.setSelection(s));
 
-let selectCharacterLeft = (_editor: Vscode.TextEditor.t) => ();
-let selectCharacterRight = (_editor: Vscode.TextEditor.t) => ();
+let selectCharacterLeft = (editor: Vscode.TextEditor.t) =>
+  editor
+  |> Vscode.TextEditor.getSelection
+  |> Selections.makePreviousCharacterSelection(
+       Vscode.TextDocument.getTextLine(_, editor.document),
+     )
+  |> Option.tap(~f=s => editor->Vscode.TextEditor.setSelection(s));
+
+let selectCharacterRight = (editor: Vscode.TextEditor.t) =>
+  editor
+  |> Vscode.TextEditor.getSelection
+  |> Selections.makeNextCharacterSelection(
+       Vscode.TextDocument.getTextLine(_, editor.document),
+     )
+  |> Option.tap(~f=s => editor->Vscode.TextEditor.setSelection(s));
+
 let selectCharacterDown = (_editor: Vscode.TextEditor.t) => ();
 let selectCharacterUp = (_editor: Vscode.TextEditor.t) => ();
 
