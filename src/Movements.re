@@ -5,31 +5,31 @@ let selectNextWord = () => {
   Vscode.Commands.cancelSelection();
   Vscode.Commands.selectWordStartRight();
 };
+let extendNextWord = () => Vscode.Commands.selectWordStartRight();
 
 let selectPreviousWord = () => {
   Vscode.Commands.cancelSelection();
   Vscode.Commands.selectWordStartLeft();
 };
+let extendPreviousWord = () => Vscode.Commands.selectWordStartLeft();
 
 let selectCharacterLeft = () => {
   Vscode.Commands.cancelSelection();
   Vscode.Commands.selectCharacterLeft();
 };
+let extendCharacterLeft = () => Vscode.Commands.selectCharacterLeft();
 
 let selectCharacterRight = () => {
   Vscode.Commands.cancelSelection();
   Vscode.Commands.selectCharacterRight();
 };
+let extendCharacterRight = () => Vscode.Commands.selectCharacterRight();
 
-let selectCharacterDown = () => {
-  Vscode.Commands.cancelSelection();
-  Vscode.Commands.moveLineDown();
-};
+let moveLineDown = () => Vscode.Commands.moveLineDown();
+let extendLineDown = () => Vscode.Commands.selectLineDown();
 
-let selectCharacterUp = () => {
-  Vscode.Commands.cancelSelection();
-  Vscode.Commands.moveLineUp();
-};
+let moveLineUp = () => Vscode.Commands.moveLineUp();
+let extendLineUp = () => Vscode.Commands.selectLineUp();
 
 let expandLineSelection = () => Vscode.Commands.expandLineSelection();
 

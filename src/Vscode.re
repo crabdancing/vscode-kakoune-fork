@@ -113,6 +113,7 @@ module Commands = {
 
   let selectWordStartRight = () =>
     "cursorWordStartRightSelect" |> executeCommand;
+
   let selectWordStartLeft = () =>
     "cursorWordStartLeftSelect" |> executeCommand;
 };

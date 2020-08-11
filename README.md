@@ -62,6 +62,7 @@ npm run build
 # Current functionality
 
 - Basic movements and selections via `w`/`b`, `h`/`j`/`k`/`l`.
+- Basic selections extensions via `W`/`B`, `H`/`J`/`K`/`L`.
 - Basic goto commands via `gh`, `gj`, `gk`, `gl`.
 - Basic goto selections via `Gh`, `Gj`, `Gk`, `Gl`.
 
