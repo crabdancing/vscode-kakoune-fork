@@ -16,10 +16,12 @@ let handleNormalMode = (editor, input: Vscode.textCommandArgs) =>
   switch (input.text) {
   | "w" => editor |> Movements.selectNextWord
   | "b" => editor |> Movements.selectPreviousWord
-  | "h" => editor |> Movements.selectCharacterLeft
-  | "j" => editor |> Movements.selectCharacterDown
-  | "k" => editor |> Movements.selectCharacterUp
-  | "l" => editor |> Movements.selectCharacterRight
+  | "h" => Movements.selectCharacterLeft()
+  | "j" =>
+    editor |> Vscode.TextEditor.getSelection |> Movements.selectCharacterDown
+  | "k" =>
+    editor |> Vscode.TextEditor.getSelection |> Movements.selectCharacterUp()
+  | "l" => Movements.selectCharacterRight()
   | "x" => editor |> Movements.selectCurrentLine
   | "g" => Mode.setMode(Mode.Goto)
   | _ => ()

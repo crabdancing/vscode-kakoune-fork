@@ -12,6 +12,13 @@ module Position = {
   external make: (~line: int, ~character: int) => t = "Position";
   [@bs.get] external character: t => int = "character";
   [@bs.get] external line: t => int = "line";
+
+  [@bs.send] external isEqual: (t, t) => bool = "isEqual";
+
+  // We switch these so that the preferred pipe-last operator makes
+  // more sense.
+  [@bs.send] external isAfter: (t, t) => bool = "isBefore";
+  [@bs.send] external isBefore: (t, t) => bool = "isAfter";
 };
 
 module Selection = {
@@ -52,6 +59,22 @@ type textDocumentContentChangeEvent = {
 };
 
 module Commands = {
+  module CursorMoveArguments = {
+    type t = {
+      [@bs.as "to"]
+      to_: string,
+      by: string,
+      value: int,
+      select: bool,
+    };
+
+    let make = (~to_, ~by, ~value=1, ~select=false, ()) => {
+      to_,
+      by,
+      value,
+      select,
+    };
+  };
   let registerCommand: (string, 'a => unit) => disposable =
     (name, callback) => vscode##commands##registerCommand(name, callback);
 
@@ -60,6 +83,32 @@ module Commands = {
 
   let executeCommandWithArg: (string, textCommandArgs) => unit =
     (command, arg) => vscode##commands##executeCommand(command, arg);
+
+  let executeCursorMoveCommand: CursorMoveArguments.t => unit =
+    arg => vscode##commands##executeCommand("cursorMove", arg);
+
+  let cancelSelection = () => "cancelSelection" |> executeCommand;
+
+  let moveCharacterRight = () =>
+    CursorMoveArguments.make(~to_="right", ~by="character", ())
+    |> executeCursorMoveCommand;
+  let selectCharacterRight = () =>
+    CursorMoveArguments.make(~to_="right", ~by="character", ~select=true, ())
+    |> executeCursorMoveCommand;
+
+  let moveCharacterLeft = () =>
+    CursorMoveArguments.make(~to_="left", ~by="character", ())
+    |> executeCursorMoveCommand;
+  let selectCharacterLeft = () =>
+    CursorMoveArguments.make(~to_="left", ~by="character", ~select=true, ())
+    |> executeCursorMoveCommand;
+
+  let moveLineDown = () =>
+    CursorMoveArguments.make(~to_="down", ~by="line", ())
+    |> executeCursorMoveCommand;
+  let moveLineUp = () =>
+    CursorMoveArguments.make(~to_="up", ~by="line", ())
+    |> executeCursorMoveCommand;
 };
 
 module Uri = {
