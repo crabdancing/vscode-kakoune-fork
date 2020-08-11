@@ -40,12 +40,12 @@
 		"package": "vsce package --baseContentUrl 'https://git.sr.ht/~reykjalin/vscode-kakoune'"
 	},
 	"devDependencies": {
+		"bs-platform": "^7.1.1",
 		"@glennsl/bs-jest": "^0.5.1",
 		"jest": "^26.2.2",
 		"vsce": "^1.78.0"
 	},
 	"dependencies": {
-		"bs-platform": "^7.1.1",
 		"tablecloth-bucklescript": "git://github.com/darklang/tablecloth#83480ad"
 	}
 }
