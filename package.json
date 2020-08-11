@@ -6,7 +6,7 @@
 		"type": "git",
 		"url": "https://git.sr.ht/~reykjalin/vscode-kakoune"
 	},
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"publisher": "reykjalin",
 	"license": "MIT",
 	"engines": {
