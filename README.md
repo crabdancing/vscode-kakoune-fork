@@ -8,8 +8,8 @@ _Please send bug reports and feature requests to the [mailing list](https://list
 
 # Table of Contents
 
-- [Motivation](#motivation)
 - [Differences between Kakoune and this plugin](#differences-between-kakoune-and-this-plugin)
+- [Motivation](#motivation)
 - [Why Reason?](#why-reason)
 - [Build Instructions](#build-instructions)
     - [Script to paste into your shell of choice](#script-to-paste-into-your-shell-of-choice)
@@ -95,7 +95,6 @@ npm run build
 
 # Upcoming functionality
 
-1. Extending selections.
 1. Multiple selections via regex search with `/`.
 1. _Edit_ multiple selections via regex search with `/`.
 1. (Maybe) `:` commands, e.g. `:w` for saving, etc.
