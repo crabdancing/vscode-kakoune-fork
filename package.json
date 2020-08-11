@@ -36,11 +36,13 @@
 		"test": "jest",
 		"build": "bsb -make-world",
 		"lint": "tslint -p ./tsconfig.json",
-		"clean": "bsb -clean-world"
+		"clean": "bsb -clean-world",
+		"package": "vsce package --baseContentUrl 'https://git.sr.ht/~reykjalin/vscode-kakoune'"
 	},
 	"devDependencies": {
 		"@glennsl/bs-jest": "^0.5.1",
-		"jest": "^26.2.2"
+		"jest": "^26.2.2",
+		"vsce": "^1.78.0"
 	},
 	"dependencies": {
 		"bs-platform": "^7.1.1",
