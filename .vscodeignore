@@ -1,14 +1,20 @@
-# Folders
+# Folders.
 .vscode/**
 .vscode-test/**
 .git
 lib
+src
+node_modules
+__tests__
 
-# Files
+# Files.
 .build.yml
 .editorconfig
 .gitignore
 .merlin
 bsconfig.json
+webpack.config.js
+
+# Previous build artifacts.
 *.vsix
-**/*.re
+

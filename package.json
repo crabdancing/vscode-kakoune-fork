@@ -26,24 +26,25 @@
 		"*",
 		"onCommand:type"
 	],
-	"main": "./src/Extension.bs.js",
+	"main": "./dist/extension.js",
 	"contributes": {},
 	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "npm run build",
-		"watch": "npm run build -- -w",
+		"vscode:prepublish": "npm run build && webpack --mode production",
+		"webpack": "webpack --mode development",
+		"webpack-dev": "webpack --mode development --watch",
 		"pretest": "npm run compile",
 		"test": "jest",
 		"build": "bsb -make-world",
-		"lint": "tslint -p ./tsconfig.json",
 		"clean": "bsb -clean-world",
 		"package": "vsce package --baseContentUrl 'https://git.sr.ht/~reykjalin/vscode-kakoune'"
 	},
 	"devDependencies": {
-		"bs-platform": "^7.1.1",
 		"@glennsl/bs-jest": "^0.5.1",
+		"bs-platform": "^7.1.1",
 		"jest": "^26.2.2",
-		"vsce": "^1.78.0"
+		"vsce": "^1.78.0",
+		"webpack": "^4.44.1",
+		"webpack-cli": "^3.3.12"
 	},
 	"dependencies": {
 		"tablecloth-bucklescript": "git://github.com/darklang/tablecloth#83480ad"

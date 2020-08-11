@@ -1,7 +1,14 @@
-node_modules
+# VSCode stuff.
 .vscode-test/
 *.vsix
 
+# Node stuff.
+node_modules
+
+# Reason stuff.
 .merlin
 lib/
 *.bs.js
+
+# Build output.
+dist/

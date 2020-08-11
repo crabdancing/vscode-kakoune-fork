@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.1]
+
+- Use webpack to optimize bundle size.
+
 ## [1.0.0]
 
 - Initial release
