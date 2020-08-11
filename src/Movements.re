@@ -1,18 +1,3 @@
-/**
- * Moves the current selection to the next word.
- */
-let selectNextWord = () => {
-  Vscode.Commands.cancelSelection();
-  Vscode.Commands.selectWordStartRight();
-};
-let extendNextWord = () => Vscode.Commands.selectWordStartRight();
-
-let selectPreviousWord = () => {
-  Vscode.Commands.cancelSelection();
-  Vscode.Commands.selectWordStartLeft();
-};
-let extendPreviousWord = () => Vscode.Commands.selectWordStartLeft();
-
 let moveCharacterLeft = () => Vscode.Commands.moveCharacterLeft();
 let extendCharacterLeft = () => Vscode.Commands.selectCharacterLeft();
 
@@ -24,6 +9,18 @@ let extendLineDown = () => Vscode.Commands.selectLineDown();
 
 let moveLineUp = () => Vscode.Commands.moveLineUp();
 let extendLineUp = () => Vscode.Commands.selectLineUp();
+
+let selectNextWord = () => {
+  moveCharacterRight();
+  Vscode.Commands.selectWordStartRight();
+};
+let extendNextWord = () => Vscode.Commands.selectWordStartRight();
+
+let selectPreviousWord = () => {
+  moveCharacterLeft();
+  Vscode.Commands.selectWordStartLeft();
+};
+let extendPreviousWord = () => Vscode.Commands.selectWordStartLeft();
 
 let expandLineSelection = () => Vscode.Commands.expandLineSelection();
 
