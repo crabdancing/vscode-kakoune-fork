@@ -24,22 +24,25 @@ describe("Text lookup functions", () => {
 
   describe("findNextNotOfType", () => {
     let testInput = [
-      (("hello world!", 0, CharacterType.Character), Ok(5)),
-      (("hello world!", 5, CharacterType.Whitespace), Ok(6)),
-      (("hello world!", 11, CharacterType.Punctuation), Ok(12)),
+      (("hello world!", 0, Ok(CharacterType.Character)), Ok(5)),
+      (("hello world!", 5, Ok(CharacterType.Whitespace)), Ok(6)),
+      (("hello world!", 11, Ok(CharacterType.Punctuation)), Ok(12)),
       (
-        ("hello world!", 12, CharacterType.Whitespace),
+        ("hello world!", 12, Ok(CharacterType.Whitespace)),
         Error(TextLookup.LookupError.Overflow),
       ),
-      (("hello world!", (-1), CharacterType.Punctuation), Error(Underflow)),
+      (
+        ("hello world!", (-1), Ok(CharacterType.Punctuation)),
+        Error(Underflow),
+      ),
     ];
 
     testAll(
       "findNextNotOfType",
       testInput,
       (((text, startIndex, characterType), expected)) =>
-      text
-      |> TextLookup.findNextNotOfType(~characterType, ~startIndex)
+      characterType
+      |> TextLookup.findNextNotOfType(~text, ~startIndex)
       |> expect
       |> toEqual(expected)
     );
@@ -47,26 +50,29 @@ describe("Text lookup functions", () => {
 
   describe("findPreviousNotOfType", () => {
     let testInput = [
-      (("hello world!", 5, CharacterType.Whitespace), Ok(5)),
-      (("hello world!", 6, CharacterType.Whitespace), Ok(5)),
-      (("hello world!", 10, CharacterType.Character), Ok(6)),
-      (("hello world!", 11, CharacterType.Punctuation), Ok(11)),
-      (("hello world!", 12, CharacterType.Punctuation), Ok(11)),
-      (("hello world!", 12, CharacterType.Punctuation), Ok(11)),
-      (("hello world!", 12, CharacterType.Whitespace), Ok(12)),
+      (("hello world!", 5, Ok(CharacterType.Whitespace)), Ok(5)),
+      (("hello world!", 6, Ok(CharacterType.Whitespace)), Ok(5)),
+      (("hello world!", 10, Ok(CharacterType.Character)), Ok(6)),
+      (("hello world!", 11, Ok(CharacterType.Punctuation)), Ok(11)),
+      (("hello world!", 12, Ok(CharacterType.Punctuation)), Ok(11)),
+      (("hello world!", 12, Ok(CharacterType.Punctuation)), Ok(11)),
+      (("hello world!", 12, Ok(CharacterType.Whitespace)), Ok(12)),
       (
-        ("hello world!", 0, CharacterType.Character),
+        ("hello world!", 0, Ok(CharacterType.Character)),
         Error(TextLookup.LookupError.Underflow),
       ),
-      (("hello world!", 13, CharacterType.Whitespace), Error(Overflow)),
+      (
+        ("hello world!", 13, Ok(CharacterType.Whitespace)),
+        Error(Overflow),
+      ),
     ];
 
     testAll(
       "findPreviousNotOfType",
       testInput,
       (((text, startIndex, characterType), expected)) =>
-      text
-      |> TextLookup.findPreviousNotOfType(~characterType, ~startIndex)
+      characterType
+      |> TextLookup.findPreviousNotOfType(~text, ~startIndex)
       |> expect
       |> toEqual(expected)
     );

@@ -48,14 +48,16 @@ let characterTypeBefore = (~startIndex, text) =>
  *
  * Returns Ok(int) for valid indices, Error(LookupError.t) otherwise.
  */
-let rec findNextNotOfType = (~characterType, ~startIndex, text) =>
+let rec findNextNotOfType = (~startIndex, ~text, originalType) =>
   text
   |> characterTypeAfter(~startIndex)
-  |> Result.andThen(~f=t =>
-       t != characterType
+  |> Result.both(originalType)
+  |> Result.andThen(~f=((characterType, originalType)) =>
+       characterType != originalType
          ? Ok(startIndex)
-         : text
-           |> findNextNotOfType(~characterType=t, ~startIndex=startIndex + 1)
+         : originalType
+           |> Result.ok
+           |> findNextNotOfType(~text, ~startIndex=startIndex + 1)
      );
 
 /**
@@ -67,8 +69,9 @@ let rec findNextNotOfType = (~characterType, ~startIndex, text) =>
  * Returns Ok(int) for valid indices, Error(LookupError.t) otherwise.
  */
 let findNextNotOfWhitespace = (~startIndex, text) =>
-  text
-  |> findNextNotOfType(~characterType=CharacterType.Whitespace, ~startIndex);
+  CharacterType.Whitespace
+  |> Result.ok
+  |> findNextNotOfType(~text, ~startIndex);
 
 /**
  * Finds the index of the first previous character that does not have the type specified
@@ -76,17 +79,16 @@ let findNextNotOfWhitespace = (~startIndex, text) =>
  *
  * Returns Ok(int) for valid indices, Error(LookupError.t) otherwise.
  */
-let rec findPreviousNotOfType = (~characterType, ~startIndex, text) =>
+let rec findPreviousNotOfType = (~startIndex, ~text, originalType) =>
   text
   |> characterTypeBefore(~startIndex)
-  |> Result.andThen(~f=t =>
-       t != characterType
+  |> Result.both(originalType)
+  |> Result.andThen(~f=((characterType, originalType)) =>
+       characterType != originalType
          ? Ok(startIndex)
-         : text
-           |> findPreviousNotOfType(
-                ~characterType=t,
-                ~startIndex=startIndex - 1,
-              )
+         : originalType
+           |> Result.ok
+           |> findPreviousNotOfType(~text, ~startIndex=startIndex - 1)
      );
 
 /**
@@ -98,11 +100,9 @@ let rec findPreviousNotOfType = (~characterType, ~startIndex, text) =>
  * Returns Ok(int) for valid indices, Error(LookupError.t) otherwise.
  */
 let findPreviousNotOfWhitespace = (~startIndex, text) =>
-  text
-  |> findPreviousNotOfType(
-       ~characterType=CharacterType.Whitespace,
-       ~startIndex,
-     );
+  CharacterType.Whitespace
+  |> Result.ok
+  |> findPreviousNotOfType(~text, ~startIndex);
 
 /**
  * Finds the index of the start of the word currently under the cursor location
@@ -126,15 +126,14 @@ let findWordStart = (~startIndex, text) => {
    *
    * Returns Ok(int) or Error(LookupError.t)
    */
-  let findStartOfNonWhitespaceWord = (~startIndex) =>
-    Result.andThen(~f=characterType => {
-      switch (text |> findPreviousNotOfType(~characterType, ~startIndex)) {
-      | Error(LookupError.Underflow) =>
-        startIndex > 0 ? Ok(0) : Error(LookupError.Underflow)
-      | Error(Overflow) => Error(Overflow)
-      | Ok(i) => Ok(i)
-      }
-    });
+  let findStartOfNonWhitespaceWord = (~startIndex, characterType) => {
+    switch (characterType |> findPreviousNotOfType(~text, ~startIndex)) {
+    | Error(LookupError.Underflow) =>
+      startIndex > 0 ? Ok(0) : Error(LookupError.Underflow)
+    | Error(Overflow) => Error(Overflow)
+    | Ok(i) => Ok(i)
+    };
+  };
 
   /**
    * When looking for the start of a word that is made up of whitespaces and
@@ -182,9 +181,7 @@ let findNextWordStart = (~startIndex, text) => {
   // 2. Find the next character that isn't a whitespace.
   text
   |> characterTypeAfter(~startIndex)
-  |> Result.andThen(~f=characterType =>
-       text |> findNextNotOfType(~characterType, ~startIndex)
-     )
+  |> findNextNotOfType(~text, ~startIndex)
   |> Result.map(~f=startIndex => {
        // If we overflow when trying to skip over whitespace, we're at the end
        // of the line, and can just return the length of the string.
