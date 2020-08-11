@@ -40,6 +40,8 @@ Just to make it easier to figure out what's actually different, here's a table w
 | `p` | Pastes over the current selections. Default VSCode behavior. | Pastes after the current selections.|
 | `P` | Clears the selections and then pastes. Cannot restore the previous selections. | Pastes before the current selections. |
 | `d` | Deletes and copies all selections. If there are no selections, deletes and copies the current lines. | Deletes all selections, but only copies the first. |
+| `jk` | Exits insert mode. | N/A |
+| `<esc>` | N/A | Exits insert mode. |
 
 # Motivation
 

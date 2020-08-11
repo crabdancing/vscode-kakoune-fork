@@ -1,4 +1,15 @@
-let handleInsertMode = (_editor, _input: Vscode.textCommandArgs) => ();
+let handleMaybeExitInsertMode = (input: Vscode.textCommandArgs) =>
+  switch (input.text) {
+  | "k" => Mode.setMode(Normal)
+  | _ => Mode.setMode(Insert)
+  };
+
+let handleInsertMode = (input: Vscode.textCommandArgs) =>
+  switch (input.text) {
+  | "j" => Mode.setMode(Mode.MaybeExitInsert)
+  | _ => input |> Vscode.Commands.executeCommandWithArg("default:type")
+  };
+
 let handleSearchMode = (_editor, _input: Vscode.textCommandArgs) => ();
 
 let handleGotoExtendMode = (input: Vscode.textCommandArgs) => {
@@ -47,6 +58,7 @@ let handleNormalMode = (input: Vscode.textCommandArgs) =>
   | "c" =>
     Edits.deleteSelections();
     Mode.setMode(Mode.Insert);
+  | "i" => Mode.setMode(Mode.Insert)
   | _ => ()
   };
 
@@ -57,7 +69,8 @@ let onType = (args: Vscode.textCommandArgs) => {
   |> Option.tap(~f=e =>
        switch (Mode.getMode()) {
        | Normal => args |> handleNormalMode
-       | Insert => args |> handleInsertMode(e)
+       | Insert => args |> handleInsertMode
+       | MaybeExitInsert => args |> handleMaybeExitInsertMode
        | Search => args |> handleSearchMode(e)
        | Goto => args |> handleGotoMode
        | GotoExtend => args |> handleGotoExtendMode
@@ -65,7 +78,13 @@ let onType = (args: Vscode.textCommandArgs) => {
      );
 };
 
-let activate = context => {
-  context->Vscode.overrideTypeCommand(onType);
-  // Vscode.setCursorStyle(Vscode.TextEditor.Block);
-};
+let activate = context =>
+  context
+  |> Vscode.overrideCommand("type", args =>
+       Vscode.TextEditor.document()
+       |> Option.tap(~f=(d: Vscode.TextDocument.t) =>
+            d.uri.toString(.) == "debug:input"
+              ? Vscode.Commands.executeCommandWithArg("default:type", args)
+              : args |> onType
+          )
+     );

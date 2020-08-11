@@ -204,28 +204,10 @@ module Workspace = {
     event => vscode##workspace##onDidChangeTextDocument(event);
 };
 
-let overrideCommand = (context, command, callback) => {
+let overrideCommand = (command, callback, context) => {
   Commands.registerCommand(command, callback)
   ->Js.Array.push(context.subscriptions)
   ->ignore;
-};
-
-let overrideTypeCommand = (context, callback) => {
-  let command = "type";
-
-  overrideCommand(context, command, args => {
-    TextEditor.document()
-    |> Option.tap(~f=(d: TextDocument.t) =>
-         switch (d.uri.toString(.), Mode.getMode()) {
-         | ("debug:input", _currentMode) =>
-           Commands.executeCommandWithArg("default:" ++ command, args)
-         | (_documentUri, Mode.Insert) =>
-           Commands.executeCommandWithArg("default:" ++ command, args);
-           callback(args);
-         | _ => callback(args)
-         }
-       )
-  });
 };
 
 let setCursorStyle = style => {

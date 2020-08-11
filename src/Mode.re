@@ -1,6 +1,7 @@
 type t =
   | Normal
   | Insert
+  | MaybeExitInsert
   | Search
   | Goto
   | GotoExtend;

@@ -13,26 +13,7 @@
 		"*"
 	],
 	"main": "./src/Extension.bs.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
-		],
-		"keybindings": [
-			{
-				"key": "Escape",
-				"command": "extension.send_escape",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "Backspace",
-				"command": "extension.send_backspace",
-				"when": "editorTextFocus"
-			}
-		]
-	},
+	"contributes": {},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "npm run build",
@@ -49,7 +30,6 @@
 		"jest": "^26.2.2"
 	},
 	"dependencies": {
-		"@glennsl/bs-json": "^5.0.2",
 		"bs-vscode": "^0.1.0",
 		"tablecloth-bucklescript": "git://github.com/darklang/tablecloth#83480ad"
 	}
