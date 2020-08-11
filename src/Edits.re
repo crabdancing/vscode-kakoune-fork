@@ -5,3 +5,6 @@ let clearSelectionsAndPaste = () => {
   Vscode.Commands.cancelSelection();
   paste();
 };
+
+let undo = () => Vscode.Commands.undo();
+let redo = () => Vscode.Commands.redo();

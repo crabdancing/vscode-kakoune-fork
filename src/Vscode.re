@@ -119,6 +119,8 @@ module Commands = {
 
   let cut = () => "editor.action.clipboardCutAction" |> executeCommand;
   let paste = () => "editor.action.clipboardPasteAction" |> executeCommand;
+  let undo = () => "undo" |> executeCommand;
+  let redo = () => "redo" |> executeCommand;
 };
 
 module Uri = {

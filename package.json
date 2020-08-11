@@ -4,7 +4,7 @@
 	"description": "Uses Kakoune as the backend while editing",
 	"version": "0.0.1",
 	"engines": {
-		"vscode": "^1.41.0"
+		"vscode": "^1.47.0"
 	},
 	"categories": [
 		"Other"

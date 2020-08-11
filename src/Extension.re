@@ -36,6 +36,7 @@ let handleGotoMode = (input: Vscode.textCommandArgs) => {
 
 let handleNormalMode = (input: Vscode.textCommandArgs) =>
   switch (input.text) {
+  // Movements.
   | "w" => Movements.selectNextWord()
   | "W" => Movements.extendNextWord()
   | "b" => Movements.selectPreviousWord()
@@ -50,14 +51,19 @@ let handleNormalMode = (input: Vscode.textCommandArgs) =>
   | "L" => Movements.extendCharacterRight()
   | "x" => Movements.selectCurrentLine()
   | "X" => Movements.expandLineSelection()
+  // Goto.
   | "g" => Mode.setMode(Mode.Goto)
   | "G" => Mode.setMode(Mode.GotoExtend)
+  // Edits.
   | "d" => Edits.deleteSelections()
   | "p" => Edits.paste()
   | "P" => Edits.clearSelectionsAndPaste()
   | "c" =>
     Edits.deleteSelections();
     Mode.setMode(Mode.Insert);
+  | "u" => Edits.undo()
+  | "U" => Edits.redo()
+  // Insert mode.
   | "i" => Mode.setMode(Mode.Insert)
   | _ => ()
   };
