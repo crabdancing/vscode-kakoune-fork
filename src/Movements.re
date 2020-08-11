@@ -1,17 +1,21 @@
 /**
  * Moves the current selection to the next word.
  */
-let selectNextWord = (editor: Vscode.TextEditor.t) => {
-  let currentSelection = editor |> Vscode.TextEditor.getSelection;
-
-  currentSelection
+let selectNextWord = (editor: Vscode.TextEditor.t) =>
+  editor
+  |> Vscode.TextEditor.getSelection
   |> Selections.makeNextWordSelection(
        Vscode.TextDocument.getTextLine(_, editor.document),
      )
   |> Option.tap(~f=s => editor->Vscode.TextEditor.setSelection(s));
-};
 
-let selectPreviousWord = (_editor: Vscode.TextEditor.t) => ();
+let selectPreviousWord = (editor: Vscode.TextEditor.t) =>
+  editor
+  |> Vscode.TextEditor.getSelection
+  |> Selections.makePreviousWordSelection(
+       Vscode.TextDocument.getTextLine(_, editor.document),
+     )
+  |> Option.tap(~f=s => editor->Vscode.TextEditor.setSelection(s));
 
 let selectCharacterLeft = (_editor: Vscode.TextEditor.t) => ();
 let selectCharacterRight = (_editor: Vscode.TextEditor.t) => ();

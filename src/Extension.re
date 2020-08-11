@@ -1,7 +1,7 @@
 let handleInsertMode = (_editor, _input: Vscode.textCommandArgs) => ();
 let handleSearchMode = (_editor, _input: Vscode.textCommandArgs) => ();
 
-let handleGotoMode = (editor, input: Vscode.textCommandArgs) =>
+let handleGotoMode = (editor, input: Vscode.textCommandArgs) => {
   switch (input.text) {
   | "h" => editor |> Movements.gotoLineStart
   | "j" => editor |> Movements.gotoFileEnd
@@ -9,6 +9,8 @@ let handleGotoMode = (editor, input: Vscode.textCommandArgs) =>
   | "l" => editor |> Movements.gotoLineEnd
   | _ => ()
   };
+  Mode.setMode(Mode.Normal);
+};
 
 let handleNormalMode = (editor, input: Vscode.textCommandArgs) =>
   switch (input.text) {

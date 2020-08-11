@@ -112,25 +112,6 @@ describe("Text lookup functions", () => {
     );
   });
 
-  describe("findPreviousWordStart", () => {
-    let testInput = [
-      (("hello world!", 9), Ok(0)),
-      (("hello world!", 11), Ok(0)),
-      (("hello world!", 12), Ok(6)),
-      (("hello world!", 2), Error(TextLookup.LookupError.Underflow)),
-      (("hello world!", 0), Error(Underflow)),
-      (("hello world!", 13), Error(Overflow)),
-    ];
-
-    testAll(
-      "findPreviousWordStart", testInput, (((text, startIndex), expected)) =>
-      text
-      |> TextLookup.findPreviousWordStart(~startIndex)
-      |> expect
-      |> toEqual(expected)
-    );
-  });
-
   describe("findPreviousWordEnd", () => {
     let testInput = [
       (("hello world!", 9), Ok(5)),
@@ -178,31 +159,32 @@ describe("Text lookup functions", () => {
 
   describe("findWordStart", () => {
     let testInput = [
-      (("hello world!", 0), Ok(0)),
       (("hello world!", 2), Ok(0)),
-      (("hello world!", 6), Ok(5)),
+      (("hello world!", 6), Ok(0)),
       (("hello world!", 8), Ok(6)),
       (("hello world!", 11), Ok(6)),
       (("hello world!", 12), Ok(11)),
-      (("hello world!", (-1)), Ok(0)),
-      (("hello world!", 13), Error(TextLookup.LookupError.Overflow)),
+      (("hello world!", 0), Error(TextLookup.LookupError.Underflow)),
+      (("hello world!", 13), Error(Overflow)),
       (("hello", 2), Ok(0)),
-      (("hello", 0), Ok(0)),
       (("hello", 5), Ok(0)),
-      (("hello", (-1)), Ok(0)),
+      (("hello", 0), Error(Underflow)),
       (("hello", 6), Error(Overflow)),
       (("#include <iostream>", 1), Ok(0)),
       (("#include <iostream>", 8), Ok(1)),
-      (("#include <iostream>", 9), Ok(8)),
+      (("#include <iostream>", 9), Ok(1)),
       (("#include <iostream>", 10), Ok(9)),
       (("#include <iostream>", 17), Ok(10)),
       (("#include <iostream>", 18), Ok(10)),
       (("#include <iostream>", 19), Ok(18)),
-      (("#include <iostream>", (-1)), Ok(0)),
       (("#include <iostream>", 20), Error(Overflow)),
+      (("    return 0;", 13), Ok(12)),
+      (("    return 0;", 12), Ok(11)),
+      (("    return 0;", 11), Ok(4)),
       (("    return 0;", 4), Ok(0)),
       (("    return 0;", 2), Ok(0)),
-      (("    return 0;", 0), Ok(0)),
+      (("    return 0;", 0), Error(Underflow)),
+      (("    return 0;", 14), Error(Overflow)),
     ];
 
     testAll("findWordStart", testInput, (((text, startIndex), expected)) =>

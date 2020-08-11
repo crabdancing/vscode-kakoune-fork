@@ -137,24 +137,39 @@ let findWordEnd = (~startIndex, text) => {
  * Returns Ok(int) when found, Error(LookupError.Underflow) otherwise.
  */
 let findWordStart = (~startIndex, text) => {
-  // The index of the first previous character that has a different type from the one
-  // currently under the cursor is the start of the word.
+  // 1. Find the first previous character that doesn't share the currenct character's type.
+  // 2. If Underflow and started searching from 0 => Ok(0)
   text
   |> characterTypeBefore(~startIndex)
   |> Result.andThen(~f=characterType =>
-       text
-       |> findPreviousNotOfType(~characterType, ~startIndex=startIndex - 1)
-     )
-  |> (
-    // If we Underflow during the search we know that the start of the word is
-    // the same as the start of the string, as such we can't actually Underflow.
-    startIndex =>
-      switch (startIndex) {
-      | Error(LookupError.Underflow) => Ok(0)
-      | Ok(i) => Ok(i)
-      | Error(Overflow) => Error(LookupError.Overflow)
-      }
-  );
+       characterType != CharacterType.Whitespace
+         ? switch (text |> findPreviousNotOfType(~characterType, ~startIndex)) {
+           | Error(LookupError.Underflow) =>
+             startIndex > 0 ? Ok(0) : Error(LookupError.Underflow)
+           | Error(Overflow) => Error(Overflow)
+           | Ok(i) => Ok(i)
+           }
+         : {
+           switch (text |> findPreviousNotOfWhitespace(~startIndex)) {
+           | Error(LookupError.Underflow) =>
+             startIndex > 0 ? Ok(0) : Error(LookupError.Underflow)
+           | Error(Overflow) => Error(Overflow)
+           | Ok(i) =>
+             text
+             |> characterTypeBefore(~startIndex=i)
+             |> Result.andThen(~f=characterType =>
+                  switch (
+                    text
+                    |> findPreviousNotOfType(~characterType, ~startIndex=i)
+                  ) {
+                  | Error(LookupError.Underflow) => Ok(0)
+                  | Error(Overflow) => Error(LookupError.Overflow)
+                  | Ok(i) => Ok(i)
+                  }
+                )
+           };
+         }
+     );
 };
 
 /**
@@ -201,27 +216,6 @@ let findNextWordEnd = (~startIndex, text) => {
        text |> findNextNotOfWhitespace(~startIndex)
      )
   |> Result.andThen(~f=startIndex => text |> findWordEnd(~startIndex));
-};
-
-/**
- * Finds the index of the start of the previous word, counted from the word currently
- * under the cursor location specified by `startIndex`.
- *
- * Returns Ok(int) when found, Error(LookupError.t) otherwise.
- */
-let findPreviousWordStart = (~startIndex, text) => {
-  // 1. Find the previous character that doesn't share the current character's type.
-  // 2. Find the previous character that isn't a whitespace.
-  // 3. Find the start of the word starting from the index retrieved in 2.
-  text
-  |> characterTypeBefore(~startIndex)
-  |> Result.andThen(~f=characterType =>
-       text |> findPreviousNotOfType(~characterType, ~startIndex)
-     )
-  |> Result.andThen(~f=startIndex =>
-       text |> findPreviousNotOfWhitespace(~startIndex)
-     )
-  |> Result.andThen(~f=startIndex => text |> findWordStart(~startIndex));
 };
 
 /**
