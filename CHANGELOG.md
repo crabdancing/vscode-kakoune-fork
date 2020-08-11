@@ -1,9 +1,9 @@
 # Change Log
 
-All notable changes to the "kakoune-mode" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
+## [1.0.0]
 
 - Initial release
+- Has support for basic movement and selections.
+- Has support for basic goto commands and selections.
+- Supports multiple ways to enter insert mode.
+- Supports exiting insert mode by using `jk`

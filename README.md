@@ -1,10 +1,8 @@
 # Kakoune mode
 
-[![builds.sr.ht status](https://builds.sr.ht/~reykjalin/vscode-kakoune.svg)](https://builds.sr.ht/~reykjalin/vscode-kakoune?)
+[![builds.sr.ht status](https://builds.sr.ht/~reykjalin/vscode-kakoune.svg)](https://builds.sr.ht/~reykjalin/vscode-kakoune)
 
-_There is currently no issue tracking._
-
-**WARNING: This VSCode extension is still under heavy development and should only be considered ready for testing. It is _not_ ready for real use.**
+_Please send bug reports and feature requests to the [mailing list](https://lists.sr.ht/~reykjalin/vscode-kakoune) via [~reykjalin/vscode-kakoune@lists.sr.ht](mailto:~reykjalin/vscode-kakoune@lists.sr.ht)._
 
 `vscode-kakoune` emulates the input behavior of the [Kakoune](https://kakoune.org) text editor.
 
@@ -42,6 +40,7 @@ Just to make it easier to figure out what's actually different, here's a table w
 | `d` | Deletes and copies all selections. If there are no selections, deletes and copies the current lines. | Deletes all selections, but only copies the first. |
 | `jk` | Exits insert mode. | N/A |
 | `<esc>` | N/A | Exits insert mode. |
+| `r` | Enters insert mode without clearing the selection. | Replaces every character in the selection with the character pressed after `r`. |
 
 # Motivation
 
@@ -91,6 +90,7 @@ npm run build
 - Basic selections extensions via `W`/`B`, `H`/`J`/`K`/`L`.
 - Basic goto commands via `gh`, `gj`, `gk`, `gl`.
 - Basic goto selections via `Gh`, `Gj`, `Gk`, `Gl`.
+- Enter insert mode with `i`, `r`, `o`, and `A`.
 
 # Upcoming functionality
 
