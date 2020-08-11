@@ -88,6 +88,7 @@ module Commands = {
     arg => vscode##commands##executeCommand("cursorMove", arg);
 
   let cancelSelection = () => "cancelSelection" |> executeCommand;
+  let expandLineSelection = () => "expandLineSelection" |> executeCommand;
 
   let moveCharacterRight = () =>
     CursorMoveArguments.make(~to_="right", ~by="character", ())

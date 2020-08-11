@@ -20,7 +20,8 @@ let handleNormalMode = (editor, input: Vscode.textCommandArgs) =>
   | "j" => Movements.selectCharacterDown()
   | "k" => Movements.selectCharacterUp()
   | "l" => Movements.selectCharacterRight()
-  | "x" => editor |> Movements.selectCurrentLine
+  | "x" => Movements.selectCurrentLine()
+  | "X" => Movements.expandLineSelection()
   | "g" => Mode.setMode(Mode.Goto)
   | _ => ()
   };

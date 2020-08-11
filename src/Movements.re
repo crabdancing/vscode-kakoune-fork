@@ -37,7 +37,12 @@ let selectCharacterUp = () => {
   Vscode.Commands.moveLineUp();
 };
 
-let selectCurrentLine = (_editor: Vscode.TextEditor.t) => ();
+let expandLineSelection = () => Vscode.Commands.expandLineSelection();
+
+let selectCurrentLine = () => {
+  Vscode.Commands.cancelSelection();
+  expandLineSelection();
+};
 
 let gotoLineStart = (_editor: Vscode.TextEditor.t) => ();
 let gotoLineEnd = (_editor: Vscode.TextEditor.t) => ();
