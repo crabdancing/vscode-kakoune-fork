@@ -7,3 +7,4 @@
 - Has support for basic goto commands and selections.
 - Supports multiple ways to enter insert mode.
 - Supports exiting insert mode by using `jk`
+- Support basic clipboard actions, i.e. copy/cut/paste via `y`/`d`/`p`.

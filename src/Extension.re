@@ -60,6 +60,7 @@ let handleNormalMode = (input: Vscode.textCommandArgs) =>
   | "d" => Edits.deleteSelections()
   | "p" => Edits.paste()
   | "P" => Edits.clearSelectionsAndPaste()
+  | "y" => Edits.copy()
   | "c" =>
     Edits.deleteSelections();
     Mode.setMode(Mode.Insert);

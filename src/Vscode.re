@@ -117,6 +117,7 @@ module Commands = {
   let selectWordStartLeft = () =>
     "cursorWordStartLeftSelect" |> executeCommand;
 
+  let copy = () => "editor.action.clipboardCopyAction" |> executeCommand;
   let cut = () => "editor.action.clipboardCutAction" |> executeCommand;
   let paste = () => "editor.action.clipboardPasteAction" |> executeCommand;
   let undo = () => "undo" |> executeCommand;

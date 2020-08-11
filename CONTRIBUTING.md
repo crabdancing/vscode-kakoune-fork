@@ -1,9 +1,9 @@
 
 # Reporting bugs
 
-Please report bugs via [~reykjalin/kakoune-mode](https://todo.git.sr.ht/~reykjalin/kakoune-mode).
-You can do this via e-mail, or by creating an account on [Sourcehut](https://sourcehut.org).
+Please report bugs via the [mailing list](https://lists.sr.ht/~reykjalin/vscode-kakoune).
+You can do this via [e-mail](mailto:~reykjalin/vscode-kakoune@lists.sr.ht), or by creating an account on [Sourcehut](https://sourcehut.org).
 
 # Contributing code
 
-[Send a patch] to [~reykjalin/kakoune-mode@lists.sr.ht](https://lists.sr.ht/~reykjalin/kakoune-mode).
+[Send a patch](https://git-send-email.io/) to the [mailing list](https://lists.sr.ht/~reykjalin/vscode-kakoune).

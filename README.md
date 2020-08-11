@@ -91,6 +91,7 @@ npm run build
 - Basic goto commands via `gh`, `gj`, `gk`, `gl`.
 - Basic goto selections via `Gh`, `Gj`, `Gk`, `Gl`.
 - Enter insert mode with `i`, `r`, `o`, and `A`.
+- Copy/cut/paste via `y`/`d`/`p`.
 
 # Upcoming functionality
 

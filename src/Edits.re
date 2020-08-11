@@ -1,5 +1,6 @@
 let deleteSelections = () => Vscode.Commands.cut();
 
+let copy = () => Vscode.Commands.copy();
 let paste = () => Vscode.Commands.paste();
 let clearSelectionsAndPaste = () => {
   Vscode.Commands.cancelSelection();
