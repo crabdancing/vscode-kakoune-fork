@@ -1,7 +1,9 @@
 let handleMaybeExitInsertMode = (input: Vscode.textCommandArgs) =>
   switch (input.text) {
   | "k" => Mode.setMode(Normal)
-  | _ => Mode.setMode(Insert)
+  | _ =>
+    input |> Vscode.Commands.executeCommandWithArg("default:type");
+    Mode.setMode(Insert);
   };
 
 let handleInsertMode = (input: Vscode.textCommandArgs) =>
