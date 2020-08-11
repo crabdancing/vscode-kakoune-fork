@@ -17,10 +17,8 @@ let handleNormalMode = (editor, input: Vscode.textCommandArgs) =>
   | "w" => editor |> Movements.selectNextWord
   | "b" => editor |> Movements.selectPreviousWord
   | "h" => Movements.selectCharacterLeft()
-  | "j" =>
-    editor |> Vscode.TextEditor.getSelection |> Movements.selectCharacterDown
-  | "k" =>
-    editor |> Vscode.TextEditor.getSelection |> Movements.selectCharacterUp()
+  | "j" => Movements.selectCharacterDown()
+  | "k" => Movements.selectCharacterUp()
   | "l" => Movements.selectCharacterRight()
   | "x" => editor |> Movements.selectCurrentLine
   | "g" => Mode.setMode(Mode.Goto)

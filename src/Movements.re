@@ -27,33 +27,15 @@ let selectCharacterRight = () => {
   Vscode.Commands.selectCharacterRight();
 };
 
-let selectCharacterDown = (currentSelection: Vscode.Selection.t) =>
-  currentSelection.anchor |> Vscode.Position.isBefore(currentSelection.active)
-    ? {
-      Vscode.Commands.cancelSelection();
-      Vscode.Commands.moveLineDown();
-      Vscode.Commands.moveCharacterLeft();
-      Vscode.Commands.selectCharacterRight();
-    }
-    : {
-      Vscode.Commands.cancelSelection();
-      Vscode.Commands.moveLineDown();
-      Vscode.Commands.selectCharacterLeft();
-    };
+let selectCharacterDown = () => {
+  Vscode.Commands.cancelSelection();
+  Vscode.Commands.moveLineDown();
+};
 
-let selectCharacterUp = ((), currentSelection: Vscode.Selection.t) =>
-  currentSelection.anchor |> Vscode.Position.isBefore(currentSelection.active)
-    ? {
-      Vscode.Commands.cancelSelection();
-      Vscode.Commands.moveLineUp();
-      Vscode.Commands.selectCharacterLeft();
-    }
-    : {
-      Vscode.Commands.cancelSelection();
-      Vscode.Commands.moveLineUp();
-      Vscode.Commands.moveCharacterLeft();
-      Vscode.Commands.selectCharacterRight();
-    };
+let selectCharacterUp = () => {
+  Vscode.Commands.cancelSelection();
+  Vscode.Commands.moveLineUp();
+};
 
 let selectCurrentLine = (_editor: Vscode.TextEditor.t) => ();
 
