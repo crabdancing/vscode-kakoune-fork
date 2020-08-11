@@ -90,26 +90,16 @@ module Commands = {
   let cancelSelection = () => "cancelSelection" |> executeCommand;
   let expandLineSelection = () => "expandLineSelection" |> executeCommand;
 
-  let moveCharacterRight = () =>
-    CursorMoveArguments.make(~to_="right", ~by="character", ())
-    |> executeCursorMoveCommand;
-  let selectCharacterRight = () =>
-    CursorMoveArguments.make(~to_="right", ~by="character", ~select=true, ())
-    |> executeCursorMoveCommand;
+  let moveCharacterRight = () => "cursorRight" |> executeCommand;
+  let selectCharacterRight = () => "cursorRightSelect" |> executeCommand;
 
-  let moveCharacterLeft = () =>
-    CursorMoveArguments.make(~to_="left", ~by="character", ())
-    |> executeCursorMoveCommand;
-  let selectCharacterLeft = () =>
-    CursorMoveArguments.make(~to_="left", ~by="character", ~select=true, ())
-    |> executeCursorMoveCommand;
+  let moveCharacterLeft = () => "cursorLeft" |> executeCommand;
+  let selectCharacterLeft = () => "cursorLeftSelect" |> executeCommand;
 
-  let moveLineDown = () =>
-    CursorMoveArguments.make(~to_="down", ~by="line", ())
-    |> executeCursorMoveCommand;
-  let moveLineUp = () =>
-    CursorMoveArguments.make(~to_="up", ~by="line", ())
-    |> executeCursorMoveCommand;
+  let moveLineDown = () => "cursorDown" |> executeCommand;
+  let moveLineUp = () => "cursorUp" |> executeCommand;
+  let selectLineDown = () => "cursorDownSelect" |> executeCommand;
+  let selectLineUp = () => "cursorUpSelect" |> executeCommand;
 
   let moveCursorLineStart = () => "cursorLineStart" |> executeCommand;
   let moveCursorLineEnd = () => "cursorLineEnd" |> executeCommand;
@@ -120,6 +110,11 @@ module Commands = {
   let moveCursorBottom = () => "cursorBottom" |> executeCommand;
   let selectToTop = () => "cursorTopSelect" |> executeCommand;
   let selectToBottom = () => "cursorBottomSelect" |> executeCommand;
+
+  let selectWordStartRight = () =>
+    "cursorWordStartRightSelect" |> executeCommand;
+  let selectWordStartLeft = () =>
+    "cursorWordStartLeftSelect" |> executeCommand;
 };
 
 module Uri = {

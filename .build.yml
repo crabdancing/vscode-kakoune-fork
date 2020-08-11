@@ -7,7 +7,7 @@ sources:
 tasks:
   - setup: |
       cd vscode-kakoune
-      npm ci
+      # npm ci
   - test: |
       cd vscode-kakoune
-      npm test
+      # npm test

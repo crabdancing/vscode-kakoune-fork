@@ -23,10 +23,10 @@ let handleGotoMode = (input: Vscode.textCommandArgs) => {
   Mode.setMode(Mode.Normal);
 };
 
-let handleNormalMode = (editor, input: Vscode.textCommandArgs) =>
+let handleNormalMode = (input: Vscode.textCommandArgs) =>
   switch (input.text) {
-  | "w" => editor |> Movements.selectNextWord
-  | "b" => editor |> Movements.selectPreviousWord
+  | "w" => Movements.selectNextWord()
+  | "b" => Movements.selectPreviousWord()
   | "h" => Movements.selectCharacterLeft()
   | "j" => Movements.selectCharacterDown()
   | "k" => Movements.selectCharacterUp()
@@ -44,7 +44,7 @@ let onType = (args: Vscode.textCommandArgs) => {
   Vscode.Window.activeTextEditor()
   |> Option.tap(~f=e =>
        switch (Mode.getMode()) {
-       | Normal => args |> handleNormalMode(e) |> ignore
+       | Normal => args |> handleNormalMode |> ignore
        | Insert => args |> handleInsertMode(e) |> ignore
        | Search => args |> handleSearchMode(e) |> ignore
        | Goto => args |> handleGotoMode |> ignore

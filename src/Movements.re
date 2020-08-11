@@ -1,21 +1,15 @@
 /**
  * Moves the current selection to the next word.
  */
-let selectNextWord = (editor: Vscode.TextEditor.t) =>
-  editor
-  |> Vscode.TextEditor.getSelection
-  |> Selections.makeNextWordSelection(
-       Vscode.TextDocument.getTextLine(_, editor.document),
-     )
-  |> Option.tap(~f=s => editor->Vscode.TextEditor.setSelection(s));
+let selectNextWord = () => {
+  Vscode.Commands.cancelSelection();
+  Vscode.Commands.selectWordStartRight();
+};
 
-let selectPreviousWord = (editor: Vscode.TextEditor.t) =>
-  editor
-  |> Vscode.TextEditor.getSelection
-  |> Selections.makePreviousWordSelection(
-       Vscode.TextDocument.getTextLine(_, editor.document),
-     )
-  |> Option.tap(~f=s => editor->Vscode.TextEditor.setSelection(s));
+let selectPreviousWord = () => {
+  Vscode.Commands.cancelSelection();
+  Vscode.Commands.selectWordStartLeft();
+};
 
 let selectCharacterLeft = () => {
   Vscode.Commands.cancelSelection();
