@@ -1,6 +1,6 @@
 # Kakoune mode
 
-[![builds.sr.ht status](https://builds.sr.ht/~reykjalin/vscode-kakoune.svg)](https://builds.sr.ht/~reykjalin/vscode-kakoune)
+[Build status](https://builds.sr.ht/~reykjalin/vscode-kakoune)
 
 _Please send bug reports and feature requests to the [mailing list](https://lists.sr.ht/~reykjalin/vscode-kakoune) via [~reykjalin/vscode-kakoune@lists.sr.ht](mailto:~reykjalin/vscode-kakoune@lists.sr.ht)._
 
