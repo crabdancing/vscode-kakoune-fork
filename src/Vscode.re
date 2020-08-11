@@ -121,6 +121,9 @@ module Commands = {
   let paste = () => "editor.action.clipboardPasteAction" |> executeCommand;
   let undo = () => "undo" |> executeCommand;
   let redo = () => "redo" |> executeCommand;
+
+  let insertLineBelow = () =>
+    "editor.action.insertLineAfter" |> executeCommand;
 };
 
 module Uri = {

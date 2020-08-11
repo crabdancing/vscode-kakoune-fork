@@ -66,7 +66,16 @@ let handleNormalMode = (input: Vscode.textCommandArgs) =>
   | "u" => Edits.undo()
   | "U" => Edits.redo()
   // Insert mode.
-  | "i" => Mode.setMode(Mode.Insert)
+  | "i" =>
+    Vscode.Commands.cancelSelection();
+    Mode.setMode(Mode.Insert);
+  | "r" => Mode.setMode(Insert)
+  | "A" =>
+    Movements.gotoLineEnd();
+    Mode.setMode(Insert);
+  | "o" =>
+    Edits.insertLineBelow();
+    Mode.setMode(Insert);
   | _ => ()
   };
 
