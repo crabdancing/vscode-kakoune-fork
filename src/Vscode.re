@@ -41,10 +41,18 @@ module Selection = {
   [@bs.get] external end_: t => Position.t = "end";
 };
 
-type range = {
-  start: Position.t,
-  [@bs.as "end"]
-  end_: Position.t,
+module Range = {
+  type t = {
+    start: Position.t,
+    [@bs.as "end"]
+    end_: Position.t,
+  };
+
+  [@bs.module "vscode"] [@bs.new]
+  external make: (~start: Position.t, ~end_: Position.t) => t = "Range";
+
+  let fromSelection = (selection: Selection.t) =>
+    make(~start=selection.start, ~end_=selection.end_);
 };
 
 type textCommandArgs = {text: string};
@@ -52,7 +60,7 @@ type textCommandArgs = {text: string};
 type extension_context = {subscriptions: array(disposable)};
 
 type textDocumentContentChangeEvent = {
-  range,
+  range: Range.t,
   rangeLength: int,
   rangeOffset: int,
   text: string,
@@ -153,6 +161,10 @@ module Commands = {
   let scrollHalfPageUp = () =>
     EditorScrollArguments.make(~to_="up", ~by="halfPage", ())
     |> executeEditorScrollCommand;
+
+  let find = () => "actions.find" |> executeCommand;
+  let toggleFindInSelection = () => "toggleFindInSelection" |> executeCommand;
+  let toggleFindRegex = () => "toggleFindRegex" |> executeCommand;
 };
 
 module Uri = {
@@ -164,8 +176,8 @@ module TextLine = {
     text: string,
     isEmptyOrWhitespace: bool,
     lineNumber: int,
-    range,
-    rangeIncludingLineBreak: range,
+    range: Range.t,
+    rangeIncludingLineBreak: Range.t,
     firstNonWhitespaceCharacterIndex: int,
   };
 };
@@ -181,6 +193,19 @@ module TextDocument = {
   let getTextLine = (index, document) =>
     index >= 0 && index < document.lineCount
       ? Some(document.lineAt(index)) : None;
+
+  let getAllTextLines = document =>
+    List.range(document.lineCount)
+    |> List.map(~f=index => document |> getTextLine(index))
+    |> List.map(~f=tl => tl |> Option.map(~f=(t: TextLine.t) => t.text))
+    |> List.mapWithIndex(~f=(lineNumber, line) =>
+         (lineNumber, line |> Option.unwrap(~default=""))
+       );
+
+  [@bs.send] external lineAt: Selection.t => TextLine.t = "lineAt";
+
+  [@bs.send] external getTextInRange: (t, Range.t) => string = "getText";
+  [@bs.send] external getAllText: (t, unit) => string = "getText";
 };
 
 module TextDocumentChangeEvent = {
@@ -220,6 +245,18 @@ module TextEditor = {
   external setSelections: (t, array(Selection.t)) => unit = "selections";
 };
 
+module InputBox = {
+  type t = {value: string};
+
+  [@bs.send] external hide: t => unit = "hide";
+  [@bs.send] external dispose: t => unit = "dispose";
+  [@bs.send] external show: t => unit = "show";
+
+  [@bs.send]
+  external onDidChangeValue: (t, string => unit) => unit = "onDidChangeValue";
+  [@bs.send] external onDidAccept: (t, unit => unit) => unit = "onDidAccept";
+};
+
 module Window = {
   type event('a) = option('a);
 
@@ -231,6 +268,9 @@ module Window = {
 
   let onDidChangeActiveTextEditor: (event(TextEditor.t) => unit) => unit =
     event => vscode##window##onDidChangeActiveTextEditor(event);
+
+  let createInputBox: unit => InputBox.t =
+    () => vscode##window##createInputBox();
 };
 
 module Workspace = {

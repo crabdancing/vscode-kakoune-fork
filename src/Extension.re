@@ -8,11 +8,9 @@ let handleMaybeExitInsertMode = (input: Vscode.textCommandArgs) =>
 
 let handleInsertMode = (input: Vscode.textCommandArgs) =>
   switch (input.text) {
-  | "j" => Mode.setMode(Mode.MaybeExitInsert)
+  | "j" => Mode.setMode(MaybeExitInsert)
   | _ => input |> Vscode.Commands.executeCommandWithArg("default:type")
   };
-
-let handleSearchMode = (_editor, _input: Vscode.textCommandArgs) => ();
 
 let handleGotoExtendMode = (input: Vscode.textCommandArgs) => {
   switch (input.text) {
@@ -22,7 +20,7 @@ let handleGotoExtendMode = (input: Vscode.textCommandArgs) => {
   | "l" => Movements.selectToLineEnd()
   | _ => ()
   };
-  Mode.setMode(Mode.Normal);
+  Mode.setMode(Normal);
 };
 
 let handleGotoMode = (input: Vscode.textCommandArgs) => {
@@ -33,10 +31,11 @@ let handleGotoMode = (input: Vscode.textCommandArgs) => {
   | "l" => Movements.gotoLineEnd()
   | _ => ()
   };
-  Mode.setMode(Mode.Normal);
+  Mode.setMode(Normal);
 };
 
-let handleNormalMode = (input: Vscode.textCommandArgs) =>
+let handleNormalMode =
+    (editor: Vscode.TextEditor.t, input: Vscode.textCommandArgs) =>
   switch (input.text) {
   // Movements.
   | "w" => Movements.selectNextWord()
@@ -54,8 +53,8 @@ let handleNormalMode = (input: Vscode.textCommandArgs) =>
   | "x" => Movements.selectCurrentLine()
   | "X" => Movements.expandLineSelection()
   // Goto.
-  | "g" => Mode.setMode(Mode.Goto)
-  | "G" => Mode.setMode(Mode.GotoExtend)
+  | "g" => Mode.setMode(Goto)
+  | "G" => Mode.setMode(GotoExtend)
   // Edits.
   | "d" => Edits.deleteSelections()
   | "p" => Edits.paste()
@@ -63,13 +62,13 @@ let handleNormalMode = (input: Vscode.textCommandArgs) =>
   | "y" => Edits.copy()
   | "c" =>
     Edits.deleteSelections();
-    Mode.setMode(Mode.Insert);
+    Mode.setMode(Insert);
   | "u" => Edits.undo()
   | "U" => Edits.redo()
   // Insert mode.
   | "i" =>
     Vscode.Commands.cancelSelection();
-    Mode.setMode(Mode.Insert);
+    Mode.setMode(Insert);
   | "r" => Mode.setMode(Insert)
   | "A" =>
     Movements.gotoLineEnd();
@@ -77,6 +76,12 @@ let handleNormalMode = (input: Vscode.textCommandArgs) =>
   | "o" =>
     Edits.insertLineBelow();
     Mode.setMode(Insert);
+  // Search mode.
+  | "/" => editor |> Search.searchAll
+  | "s" =>
+    editor
+    |> Vscode.TextEditor.getSelections
+    |> Search.searchSelections(~editor)
   | _ => ()
   };
 
@@ -86,10 +91,9 @@ let onType = (args: Vscode.textCommandArgs) => {
   Vscode.Window.activeTextEditor()
   |> Option.tap(~f=e =>
        switch (Mode.getMode()) {
-       | Normal => args |> handleNormalMode
+       | Normal => args |> handleNormalMode(e)
        | Insert => args |> handleInsertMode
        | MaybeExitInsert => args |> handleMaybeExitInsertMode
-       | Search => args |> handleSearchMode(e)
        | Goto => args |> handleGotoMode
        | GotoExtend => args |> handleGotoExtendMode
        }

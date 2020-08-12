@@ -92,11 +92,10 @@ npm run build
 - Basic goto selections via `Gh`, `Gj`, `Gk`, `Gl`.
 - Enter insert mode with `i`, `r`, `o`, and `A`.
 - Copy/cut/paste via `y`/`d`/`p`.
+- Select and edit multiple selections with a regex via `s` and `/`.
 
 # Upcoming functionality
 
-1. Multiple selections via regex search with `/`.
-1. _Edit_ multiple selections via regex search with `/`.
 1. (Maybe) `:` commands, e.g. `:w` for saving, etc.
     - Show pop up (Ctrl+P like menu) during search and `:` commands.
         - Show suggestions from the Kakoune clippy in pop up.
