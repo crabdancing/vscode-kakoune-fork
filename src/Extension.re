@@ -69,12 +69,18 @@ let handleNormalMode =
   | "i" =>
     Vscode.Commands.cancelSelection();
     Mode.setMode(Insert);
+  | "I" =>
+    Movements.gotoLineHome();
+    Mode.setMode(Insert);
   | "r" => Mode.setMode(Insert)
   | "A" =>
     Movements.gotoLineEnd();
     Mode.setMode(Insert);
   | "o" =>
     Edits.insertLineBelow();
+    Mode.setMode(Insert);
+  | "O" =>
+    Edits.insertLineAbove();
     Mode.setMode(Insert);
   // Search mode.
   | "/" => editor |> Search.searchAll

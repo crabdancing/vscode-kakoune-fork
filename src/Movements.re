@@ -34,6 +34,8 @@ let gotoLineEnd = () => Vscode.Commands.moveCursorLineEnd();
 let gotoFileStart = () => Vscode.Commands.moveCursorTop();
 let gotoFileEnd = () => Vscode.Commands.moveCursorBottom();
 
+let gotoLineHome = () => Vscode.Commands.moveCursorHome();
+
 let selectToLineStart = () => Vscode.Commands.selectToLineStart();
 let selectToLineEnd = () => Vscode.Commands.selectToLineEnd();
 let selectToFileStart = () => Vscode.Commands.selectToTop();

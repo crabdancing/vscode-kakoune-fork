@@ -135,6 +135,8 @@ module Commands = {
   let selectToLineStart = () => "cursorLineStartSelect" |> executeCommand;
   let selectToLineEnd = () => "cursorLineEndSelect" |> executeCommand;
 
+  let moveCursorHome = () => "cursorHome" |> executeCommand;
+
   let moveCursorTop = () => "cursorTop" |> executeCommand;
   let moveCursorBottom = () => "cursorBottom" |> executeCommand;
   let selectToTop = () => "cursorTopSelect" |> executeCommand;
@@ -154,6 +156,8 @@ module Commands = {
 
   let insertLineBelow = () =>
     "editor.action.insertLineAfter" |> executeCommand;
+  let insertLineAbove = () =>
+    "editor.action.insertLineBefore" |> executeCommand;
 
   let scrollHalfPageDown = () =>
     EditorScrollArguments.make(~to_="down", ~by="halfPage", ())

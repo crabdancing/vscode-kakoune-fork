@@ -90,12 +90,18 @@ npm run build
 - Basic selections extensions via `W`/`B`, `H`/`J`/`K`/`L`.
 - Basic goto commands via `gh`, `gj`, `gk`, `gl`.
 - Basic goto selections via `Gh`, `Gj`, `Gk`, `Gl`.
-- Enter insert mode with `i`, `r`, `o`, and `A`.
+- Enter insert mode with `i`, `I`, `r`, `o`, `O`, and `A`.
 - Copy/cut/paste via `y`/`d`/`p`.
 - Select and edit multiple selections with a regex via `s` and `/`.
 
 # Upcoming functionality
 
+1. Repeat previous command via `.`.
+1. (Maybe) Make some indication of what mode you're in?
+1. (Maybe) Don't overwrite selection in insert mode.
+1. (Maybe) Handle pasting the same as Kakoune does.
+1. (Maybe) Handle replace mode the same as Kakoune.
 1. (Maybe) `:` commands, e.g. `:w` for saving, etc.
     - Show pop up (Ctrl+P like menu) during search and `:` commands.
         - Show suggestions from the Kakoune clippy in pop up.
+1. (Maybe) Record macros.
