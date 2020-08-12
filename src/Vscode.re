@@ -1,6 +1,6 @@
 [@bs.module] external vscode: Js.t({..}) = "vscode";
 
-type disposable;
+type disposable = unit;
 
 module Position = {
   type t = {
@@ -75,6 +75,24 @@ module Commands = {
       select,
     };
   };
+
+  module EditorScrollArguments = {
+    type t = {
+      [@bs.as "to"]
+      to_: string,
+      by: string,
+      value: int,
+      revealCursor: bool,
+    };
+
+    let make = (~to_, ~by, ~value=1, ~revealCursor=true, ()) => {
+      to_,
+      by,
+      value,
+      revealCursor,
+    };
+  };
+
   let registerCommand: (string, 'a => unit) => disposable =
     (name, callback) => vscode##commands##registerCommand(name, callback);
 
@@ -83,6 +101,9 @@ module Commands = {
 
   let executeCommandWithArg: (string, textCommandArgs) => unit =
     (command, arg) => vscode##commands##executeCommand(command, arg);
+
+  let executeEditorScrollCommand: EditorScrollArguments.t => unit =
+    arg => vscode##commands##executeCommand("editorScroll", arg);
 
   let executeCursorMoveCommand: CursorMoveArguments.t => unit =
     arg => vscode##commands##executeCommand("cursorMove", arg);
@@ -125,6 +146,13 @@ module Commands = {
 
   let insertLineBelow = () =>
     "editor.action.insertLineAfter" |> executeCommand;
+
+  let scrollHalfPageDown = () =>
+    EditorScrollArguments.make(~to_="down", ~by="halfPage", ())
+    |> executeEditorScrollCommand;
+  let scrollHalfPageUp = () =>
+    EditorScrollArguments.make(~to_="up", ~by="halfPage", ())
+    |> executeEditorScrollCommand;
 };
 
 module Uri = {

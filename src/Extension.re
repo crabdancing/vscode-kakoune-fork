@@ -96,7 +96,7 @@ let onType = (args: Vscode.textCommandArgs) => {
      );
 };
 
-let activate = context =>
+let activate = context => {
   context
   |> Vscode.overrideCommand("type", args =>
        Vscode.TextEditor.document()
@@ -106,3 +106,13 @@ let activate = context =>
               : args |> onType
           )
      );
+
+  Vscode.Commands.registerCommand(
+    "vscode-kakoune.scrollDown",
+    Vscode.Commands.scrollHalfPageDown,
+  );
+  Vscode.Commands.registerCommand(
+    "vscode-kakoune.scrollUp",
+    Vscode.Commands.scrollHalfPageUp,
+  );
+};

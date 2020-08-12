@@ -27,7 +27,34 @@
 		"onCommand:type"
 	],
 	"main": "./dist/extension.js",
-	"contributes": {},
+	"contributes": {
+		"commands": [
+			{
+				"command": "vscode-kakoune.scrollDown",
+				"title": "Scroll down half a page",
+				"category": "Movement"
+			},
+			{
+				"command": "vscode-kakoune.scrollUp",
+				"title": "Scroll up half a page",
+				"category": "Movement"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "vscode-kakoune.scrollDown",
+				"key": "ctrl+d",
+				"mac": "ctrl+d",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "vscode-kakoune.scrollUp",
+				"key": "ctrl+u",
+				"mac": "ctrl+u",
+				"when": "editorTextFocus"
+			}
+		]
+	},
 	"scripts": {
 		"vscode:prepublish": "npm run build && webpack --mode production",
 		"webpack": "webpack --mode development",
