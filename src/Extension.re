@@ -115,4 +115,7 @@ let activate = context => {
     "vscode-kakoune.scrollUp",
     Vscode.Commands.scrollHalfPageUp,
   );
+  Vscode.Commands.registerCommand("vscode-kakoune.toNormalMode", () =>
+    Mode.setMode(Mode.Normal)
+  );
 };

@@ -42,6 +42,11 @@
 		],
 		"keybindings": [
 			{
+				"command": "vscode-kakoune.toNormalMode",
+				"key": "Escape",
+				"when": "editorTextFocus"
+			},
+			{
 				"command": "vscode-kakoune.scrollDown",
 				"key": "ctrl+d",
 				"mac": "ctrl+d",
