@@ -77,6 +77,12 @@ let moveCursorToSelectionEnd = (editor: Vscode.TextEditor.t) =>
   editor
   |> Vscode.TextEditor.getSelections
   |> Array.map(~f=(s: Vscode.Selection.t) =>
-       Vscode.Selection.make(~anchor=s.end_, ~active=s.end_)
+       s.start |> Vscode.Position.isEqual(s.end_)
+         ? {
+           let character = s.end_.character + 1;
+           let newPos = Vscode.Position.make(~line=s.end_.line, ~character);
+           Vscode.Selection.make(~anchor=newPos, ~active=newPos);
+         }
+         : Vscode.Selection.make(~anchor=s.end_, ~active=s.end_)
      )
   |> Vscode.TextEditor.setSelections(editor);
