@@ -1,5 +1,20 @@
 # Change Log
 
+## [1.2.0]
+
+**New features**
+
+- Add: Use `<space>` in normal mode to cancel all selections except the primary selection.
+- Add: Use `;` to reduce all selections to just the cursor.
+- Add: Use `f` to move the selection from the cursor on to the next instance of the provided character.
+- Add: Use `F` to extend the selection from the cursor on to the next instance of the provided character.
+- Add: Use `t` to move the selection from the cursor to the next instance of the provided character.
+- Add: Use `T` to extend the selection from the cursor to the next instance of the provided character.
+
+**Bug fixes**
+
+- Fix: `a` now starts writing after character under cursor when there is no selection.
+
 ## [1.1.1]
 
 **Bug fixes**
