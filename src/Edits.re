@@ -31,3 +31,6 @@ let redo = () => Vscode.Commands.redo();
 
 let insertLineBelow = () => Vscode.Commands.insertLineBelow();
 let insertLineAbove = () => Vscode.Commands.insertLineAbove();
+
+let increaseSelectionIndentation = () => Vscode.Commands.increaseIndentation();
+let decreaseSelectionIndentation = () => Vscode.Commands.decreaseIndentation();

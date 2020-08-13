@@ -169,6 +169,11 @@ module Commands = {
   let find = () => "actions.find" |> executeCommand;
   let toggleFindInSelection = () => "toggleFindInSelection" |> executeCommand;
   let toggleFindRegex = () => "toggleFindRegex" |> executeCommand;
+
+  let increaseIndentation = () =>
+    "editor.action.indentLines" |> executeCommand;
+  let decreaseIndentation = () =>
+    "editor.action.outdentLines" |> executeCommand;
 };
 
 module Uri = {

@@ -65,6 +65,8 @@ let handleNormalMode =
     Mode.setMode(Insert);
   | "u" => Edits.undo()
   | "U" => Edits.redo()
+  | ">" => Edits.increaseSelectionIndentation()
+  | "<" => Edits.decreaseSelectionIndentation()
   // Insert mode.
   | "i" =>
     editor |> Movements.moveCursorToSelectionStart;
