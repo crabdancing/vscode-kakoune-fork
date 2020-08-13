@@ -128,4 +128,6 @@ let activate = context => {
   Vscode.Commands.registerCommand("vscode-kakoune.toNormalMode", () =>
     Mode.setMode(Mode.Normal)
   );
+
+  Vscode.setCursorStyle(Block);
 };
