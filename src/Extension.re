@@ -67,6 +67,19 @@ let handleNormalMode =
   // Goto.
   | "g" => Mode.setMode(Goto)
   | "G" => Mode.setMode(GotoExtend)
+  // Selections manipulation.
+  | ";" =>
+    editor
+    |> Vscode.TextEditor.getSelections
+    |> Selections.onlyActiveCursor(
+         ~setSelections=Vscode.TextEditor.setSelections(editor),
+       )
+  | " " =>
+    editor
+    |> Vscode.TextEditor.getSelections
+    |> Selections.onlyPrimarySelection(
+         ~setSelections=Vscode.TextEditor.setSelections(editor),
+       )
   // Edits.
   | "d" => editor |> Edits.deleteSelections
   | "p" => editor |> Edits.pasteAfter
