@@ -14,9 +14,9 @@
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
 			"outFiles": [
-				"${workspaceFolder}/src/**/*.bs.js"
+				"dist/**/*.js"
 			],
-			"preLaunchTask": "npm: build"
+			"preLaunchTask": "npm: vscode:prepublish"
 		},
 		{
 			"name": "Extension Tests",
