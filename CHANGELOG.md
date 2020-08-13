@@ -22,6 +22,7 @@
 - Fix: Pressing `c` to enter insert mode without a selection now correctly deletes the character under the cursor.
 - Fix: Multiple selections no longer disappear when using `w`/`b`.
 - Fix: Pasting via `p`/`P` now pastes after/before the current selection respectively.
+- Fix: If you don't press 'k' after 'j' while in insert mode, the 'j' is now inserted.
 
 ## [1.0.1]
 
