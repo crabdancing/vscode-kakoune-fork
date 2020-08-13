@@ -56,12 +56,12 @@ let handleNormalMode =
   | "g" => Mode.setMode(Goto)
   | "G" => Mode.setMode(GotoExtend)
   // Edits.
-  | "d" => Edits.deleteSelections()
+  | "d" => editor |> Edits.deleteSelections
   | "p" => Edits.paste()
   | "P" => Edits.clearSelectionsAndPaste()
   | "y" => Edits.copy()
   | "c" =>
-    Edits.deleteSelections();
+    editor |> Edits.deleteSelections;
     Mode.setMode(Insert);
   | "u" => Edits.undo()
   | "U" => Edits.redo()
