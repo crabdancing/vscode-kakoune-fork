@@ -59,6 +59,46 @@ let searchAll = (editor: Vscode.TextEditor.t) => {
   searchBox |> Vscode.InputBox.show;
 };
 
+let splitSelectionIntoLines =
+    (~editor: Vscode.TextEditor.t, selection: Vscode.Selection.t) => {
+  let {active, anchor}: Vscode.Selection.t = selection;
+
+  active.line == anchor.line
+    ? [selection]
+    : {
+      let selectionText =
+        editor.document
+        |> Vscode.TextDocument.getTextInRange(
+             _,
+             Vscode.Range.fromSelection(selection),
+           );
+
+      selectionText
+      |> String.split(~on="\n")
+      |> List.mapWithIndex(~f=(index, l) => {
+           let anchor =
+             Vscode.Position.make(
+               ~line=index + selection.start.line,
+               ~character=0,
+             );
+           let active =
+             Vscode.Position.make(
+               ~line=index + selection.start.line,
+               ~character=l |> String.length,
+             );
+           Vscode.Selection.make(~anchor, ~active);
+         });
+    };
+};
+
+let splitSelectionsIntoLines =
+    (~editor: Vscode.TextEditor.t, selections: array(Vscode.Selection.t)) =>
+  selections
+  |> Array.map(~f=(s: Vscode.Selection.t) =>
+       s |> splitSelectionIntoLines(~editor) |> Array.fromList
+     )
+  |> Array.flatten;
+
 let searchSelections = (~editor: Vscode.TextEditor.t, originalSelections) => {
   let searchBox = Vscode.Window.createInputBox();
 
@@ -68,6 +108,7 @@ let searchSelections = (~editor: Vscode.TextEditor.t, originalSelections) => {
 
   Vscode.InputBox.onDidChangeValue(searchBox, value =>
     originalSelections
+    |> splitSelectionsIntoLines(~editor)
     |> Array.map(~f=(s: Vscode.Selection.t) =>
          makeLookupData(
            ~lineNumber=s.start.line,
