@@ -1,9 +1,17 @@
+let toNormalMode = () => {
+  Mode.setMode(Normal);
+  Vscode.setCursorStyle(Block);
+};
+
+let toInsertMode = () => {
+  Mode.setMode(Insert);
+  Vscode.setCursorStyle(Line);
+};
+
 let handleMaybeExitInsertMode = (input: Vscode.textCommandArgs) =>
   switch (input.text) {
-  | "k" => Mode.setMode(Normal)
-  | _ =>
-    input |> Vscode.Commands.executeCommandWithArg("default:type");
-    Mode.setMode(Insert);
+  | "k" => toNormalMode()
+  | _ => input |> Vscode.Commands.executeCommandWithArg("default:type")
   };
 
 let handleInsertMode = (input: Vscode.textCommandArgs) =>
@@ -20,7 +28,7 @@ let handleGotoExtendMode = (input: Vscode.textCommandArgs) => {
   | "l" => Movements.selectToLineEnd()
   | _ => ()
   };
-  Mode.setMode(Normal);
+  toNormalMode();
 };
 
 let handleGotoMode = (input: Vscode.textCommandArgs) => {
@@ -31,7 +39,7 @@ let handleGotoMode = (input: Vscode.textCommandArgs) => {
   | "l" => Movements.gotoLineEnd()
   | _ => ()
   };
-  Mode.setMode(Normal);
+  toNormalMode();
 };
 
 let handleNormalMode =
@@ -62,7 +70,7 @@ let handleNormalMode =
   | "y" => Edits.copy()
   | "c" =>
     editor |> Edits.deleteSelections;
-    Mode.setMode(Insert);
+    toInsertMode();
   | "u" => Edits.undo()
   | "U" => Edits.redo()
   | ">" => Edits.increaseSelectionIndentation()
@@ -70,23 +78,23 @@ let handleNormalMode =
   // Insert mode.
   | "i" =>
     editor |> Movements.moveCursorToSelectionStart;
-    Mode.setMode(Insert);
+    toInsertMode();
   | "I" =>
     Movements.gotoLineHome();
-    Mode.setMode(Insert);
-  | "r" => Mode.setMode(Insert)
+    toInsertMode();
+  | "r" => toInsertMode()
   | "a" =>
     editor |> Movements.moveCursorToSelectionEnd;
-    Mode.setMode(Insert);
+    toInsertMode();
   | "A" =>
     Movements.gotoLineEnd();
-    Mode.setMode(Insert);
+    toInsertMode();
   | "o" =>
     Edits.insertLineBelow();
-    Mode.setMode(Insert);
+    toInsertMode();
   | "O" =>
     Edits.insertLineAbove();
-    Mode.setMode(Insert);
+    toInsertMode();
   // Search mode.
   | "/" => editor |> Search.searchAll
   | "s" =>
@@ -131,8 +139,11 @@ let activate = context => {
     Vscode.Commands.scrollHalfPageUp,
   );
   Vscode.Commands.registerCommand("vscode-kakoune.toNormalMode", () =>
-    Mode.setMode(Mode.Normal)
+    toNormalMode()
+  );
+  Vscode.Commands.registerCommand("vscode-kakoune.toInsertMode", () =>
+    toInsertMode()
   );
 
-  Vscode.setCursorStyle(Block);
+  toNormalMode();
 };
