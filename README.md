@@ -59,6 +59,12 @@ You can not type in normal mode, until you [enter insert mode](#enter-insert-mod
 | `x` | Select the line the current selection is in. If a full line is currently selected, selects the line below the current selection |
 | `X` | Extend the selection to include the line below the current selection |
 | `g` | Enter [goto mode](#goto-mode)
+| `<space>` | Cancel all selections except the primary selection |
+| `;` | Reduce all selections to just the cursor |
+| `f` | Move the selection from the cursor on to the next instance of the provided character |
+| `F` | Extend the selection from the cursor on to the next instance of the provided character |
+| `t` | Move the selection from the cursor to the next instance of the provided character |
+| `T` | Extend the selection from the cursor to the next instance of the provided character |
 
 ## Goto mode
 
