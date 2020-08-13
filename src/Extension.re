@@ -38,9 +38,9 @@ let handleNormalMode =
     (editor: Vscode.TextEditor.t, input: Vscode.textCommandArgs) =>
   switch (input.text) {
   // Movements.
-  | "w" => Movements.selectNextWord()
+  | "w" => editor |> Movements.selectNextWord
   | "W" => Movements.extendNextWord()
-  | "b" => Movements.selectPreviousWord()
+  | "b" => editor |> Movements.selectPreviousWord
   | "B" => Movements.extendPreviousWord()
   | "h" => Movements.moveCharacterLeft()
   | "H" => Movements.extendCharacterLeft()

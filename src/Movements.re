@@ -10,14 +10,36 @@ let extendLineDown = () => Vscode.Commands.selectLineDown();
 let moveLineUp = () => Vscode.Commands.moveLineUp();
 let extendLineUp = () => Vscode.Commands.selectLineUp();
 
-let selectNextWord = () => {
-  moveCharacterRight();
+let selectNextWord = (editor: Vscode.TextEditor.t) => {
+  // Make sure every selection has no character selected and the cursor
+  // is moved to the active position.
+  editor
+  |> Vscode.TextEditor.getSelections
+  |> Array.map(~f=(s: Vscode.Selection.t) => {
+       s.start |> Vscode.Position.isEqual(s.end_)
+         ? s
+         : {
+           Vscode.Selection.make(~anchor=s.end_, ~active=s.end_);
+         }
+     })
+  |> Vscode.TextEditor.setSelections(editor);
   Vscode.Commands.selectWordStartRight();
 };
 let extendNextWord = () => Vscode.Commands.selectWordStartRight();
 
-let selectPreviousWord = () => {
-  moveCharacterLeft();
+let selectPreviousWord = (editor: Vscode.TextEditor.t) => {
+  // Make sure every selection has no character selected and the cursor
+  // is moved to the active position.
+  editor
+  |> Vscode.TextEditor.getSelections
+  |> Array.map(~f=(s: Vscode.Selection.t) => {
+       s.start |> Vscode.Position.isEqual(s.end_)
+         ? s
+         : {
+           Vscode.Selection.make(~anchor=s.start, ~active=s.start);
+         }
+     })
+  |> Vscode.TextEditor.setSelections(editor);
   Vscode.Commands.selectWordStartLeft();
 };
 let extendPreviousWord = () => Vscode.Commands.selectWordStartLeft();
