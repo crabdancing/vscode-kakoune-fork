@@ -16,11 +16,12 @@ let selectNextWord = (editor: Vscode.TextEditor.t) => {
   editor
   |> Vscode.TextEditor.getSelections
   |> Array.map(~f=(s: Vscode.Selection.t) => {
-       s.start |> Vscode.Position.isEqual(s.end_)
-         ? s
-         : {
-           Vscode.Selection.make(~anchor=s.end_, ~active=s.end_);
-         }
+       s.start
+       |> Vscode.Position.isEqual(s.end_)
+       || s.active
+       |> Vscode.Position.isBefore(s.anchor)
+         ? Vscode.Selection.make(~anchor=s.start, ~active=s.start)
+         : Vscode.Selection.make(~anchor=s.end_, ~active=s.end_)
      })
   |> Vscode.TextEditor.setSelections(editor);
   Vscode.Commands.selectWordStartRight();
@@ -33,11 +34,12 @@ let selectPreviousWord = (editor: Vscode.TextEditor.t) => {
   editor
   |> Vscode.TextEditor.getSelections
   |> Array.map(~f=(s: Vscode.Selection.t) => {
-       s.start |> Vscode.Position.isEqual(s.end_)
-         ? s
-         : {
-           Vscode.Selection.make(~anchor=s.start, ~active=s.start);
-         }
+       s.start
+       |> Vscode.Position.isEqual(s.end_)
+       || s.anchor
+       |> Vscode.Position.isBefore(s.active)
+         ? Vscode.Selection.make(~anchor=s.end_, ~active=s.end_)
+         : Vscode.Selection.make(~anchor=s.start, ~active=s.start)
      })
   |> Vscode.TextEditor.setSelections(editor);
   Vscode.Commands.selectWordStartLeft();
