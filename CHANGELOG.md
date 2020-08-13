@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.1.1]
+
+**Bug fixes**
+
+- Fix: `s` now correctly handles multiline selections.
+
 ## [1.1.0]
 
 **New features**
