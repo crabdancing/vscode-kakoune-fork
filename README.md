@@ -8,6 +8,12 @@ _Please send bug reports and feature requests to the [mailing list](https://list
 
 # Table of Contents
 
+- [Keymappings](#keymappings)
+    - [Enter insert mode](#enter-insert-mode)
+    - [Movements and selections](#movements-and-selections)
+    - [Goto mode](#goto-mode)
+    - [Editing the file](#editing-the-file)
+    - [Searching for things to select](#searching-for-things-to-select)
 - [Differences between Kakoune and this plugin](#differences-between-kakoune-and-this-plugin)
 - [Motivation](#motivation)
 - [Why Reason?](#why-reason)
@@ -15,6 +21,80 @@ _Please send bug reports and feature requests to the [mailing list](https://list
     - [Script to paste into your shell of choice](#script-to-paste-into-your-shell-of-choice)
 - [Current functionality](#current-functionality)
 - [Upcoming functionality](#upcoming-functionality)
+
+# Keymappings
+
+This plugin emulates modal editing, and will start in normal mode.
+You can not type in normal mode, until you [enter insert mode](#enter-insert-mode)
+
+## Enter insert mode
+
+| Key | Effect |
+|----:|:-------|
+| `i` | Moves the cursor to the beginning of the selection and enters insert mode |
+| `I` | Moves the cursor to the start of the line and enters insert mode |
+| `a` | Moves the cursor to the end of the selection and enters insert mode |
+| `A` | Moves the cursor to the end of the line and enters insert mode |
+| `o` | Creates a new empty line below the current selection, moves the cursor there, and enters insert mode |
+| `O` | Creates a new empty line above the current selection, moves the cursor there, and enters insert mode |
+| `r` | Enters insert mode without clearing the current selections |
+| `c` | Clears the current selection and enters insert mode |
+
+## Movements and selections
+
+| Key | Effect |
+|----:|:-------|
+| `w` | Select the word to the right |
+| `W` | Extend selection one word to the right |
+| `b` | Select the word to the left |
+| `B` | Extend selection one word to the left |
+| `h` | Move caret left |
+| `H` | Extend selection one character to the right |
+| `j` | Move caret down |
+| `J` | Extend selection to the character below the caret |
+| `k` | Move caret up |
+| `K` | Extend selection to the character above the caret |
+| `l` | Move caret right |
+| `L` | Extend selection one character to the left |
+| `x` | Select the line the current selection is in. If a full line is currently selected, selects the line below the current selection |
+| `X` | Extend the selection to include the line below the current selection |
+| `g` | Enter [goto mode](#goto-mode)
+
+## Goto mode
+
+When in goto mode you can quickly jump around the file.
+Pressing any button (even if it's not part of goto mode) will put you back in normal mode.
+
+| Key | Effect |
+|----:|:-------|
+| `h` | Move caret to the start of the line |
+| `H` | Extend selection to the start of the line |
+| `j` | Move caret to the bottom of the file |
+| `J` | Extend selection to the bottom of the file |
+| `k` | Move caret to the start of the file |
+| `K` | Extend selection to the start of the file |
+| `l` | Move caret to the end of the line |
+| `L` | Extend selection to the end of the line |
+
+## Editing the file
+
+| Key | Effect |
+|----:|:-------|
+| `d` | Cuts the current selections |
+| `y` | Copies the current selections |
+| `p` | Pastes from the clipboard after the current selection |
+| `P` | Pastes from the clipboard before the current selection |
+| `u` | Undo |
+| `U` | Redo |
+| `>` | Increase indentation |
+| `<` | Decrease indentation |
+
+## Searching for things to select
+
+| Key | Effect |
+|----:|:-------|
+| `s` | Regex search the current selections and select every instance of text that matches |
+| `/` | Regex search the whole file and select every instance of text that matches |
 
 # Differences between Kakoune and this plugin
 
@@ -35,11 +115,10 @@ Just to make it easier to figure out what's actually different, here's a table w
 | Command | vscode-kakoune | Kakoune |
 |--------:|:---------------|:--------|
 | `h`/`j`/`k`/`l` | Moves the _cursor_ left/down/up/right. | Selects one character left/down/up/right. |
-| `p` | Pastes over the current selections. Default VSCode behavior. | Pastes after the current selections.|
-| `P` | Clears the selections and then pastes. Cannot restore the previous selections. | Pastes before the current selections. |
-| `d` | Deletes and copies all selections. If there are no selections, deletes and copies the current lines. | Deletes all selections, but only copies the first. |
-| `jk` | Exits insert mode. | N/A |
-| `<esc>` | N/A | Exits insert mode. |
+| `p` | Pastes after the current selections. Does not restore selections. | Pastes after the current selections without affecting them.|
+| `P` | Pastes before the current selections. Does not restore selections. | Pastes before the current selections without affecting them. |
+| `d` | Deletes and copies all selections. | Deletes all selections, but only copies the first. |
+| `jk` (in insert mode) | Exits insert mode. | N/A |
 | `r` | Enters insert mode without clearing the selection. | Replaces every character in the selection with the character pressed after `r`. |
 
 # Motivation
