@@ -21,8 +21,24 @@ let deleteSelections = (editor: Vscode.TextEditor.t) => {
 
 let copy = () => Vscode.Commands.copy();
 let paste = () => Vscode.Commands.paste();
-let clearSelectionsAndPaste = () => {
-  Vscode.Commands.cancelSelection();
+let pasteAfter = (editor: Vscode.TextEditor.t) => {
+  editor
+  |> Vscode.TextEditor.getSelections
+  |> Array.map(~f=(s: Vscode.Selection.t) =>
+       Vscode.Selection.make(~active=s.end_, ~anchor=s.end_)
+     )
+  |> Vscode.TextEditor.setSelections(editor);
+
+  paste();
+};
+let pasteBefore = (editor: Vscode.TextEditor.t) => {
+  editor
+  |> Vscode.TextEditor.getSelections
+  |> Array.map(~f=(s: Vscode.Selection.t) =>
+       Vscode.Selection.make(~active=s.start, ~anchor=s.start)
+     )
+  |> Vscode.TextEditor.setSelections(editor);
+
   paste();
 };
 

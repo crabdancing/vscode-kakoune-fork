@@ -65,8 +65,8 @@ let handleNormalMode =
   | "G" => Mode.setMode(GotoExtend)
   // Edits.
   | "d" => editor |> Edits.deleteSelections
-  | "p" => Edits.paste()
-  | "P" => Edits.clearSelectionsAndPaste()
+  | "p" => editor |> Edits.pasteAfter
+  | "P" => editor |> Edits.pasteBefore
   | "y" => Edits.copy()
   | "c" =>
     editor |> Edits.deleteSelections;
