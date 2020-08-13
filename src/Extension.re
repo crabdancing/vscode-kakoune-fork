@@ -11,7 +11,11 @@ let toInsertMode = () => {
 let handleMaybeExitInsertMode = (input: Vscode.textCommandArgs) =>
   switch (input.text) {
   | "k" => toNormalMode()
-  | _ => input |> Vscode.Commands.executeCommandWithArg("default:type")
+  | _ =>
+    ({text: "j"}: Vscode.textCommandArgs)
+    |> Vscode.Commands.executeCommandWithArg("default:type");
+    input |> Vscode.Commands.executeCommandWithArg("default:type");
+    toInsertMode();
   };
 
 let handleInsertMode = (input: Vscode.textCommandArgs) =>
