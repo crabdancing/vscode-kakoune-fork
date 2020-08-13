@@ -67,12 +67,15 @@ let handleNormalMode =
   | "U" => Edits.redo()
   // Insert mode.
   | "i" =>
-    Vscode.Commands.cancelSelection();
+    editor |> Movements.moveCursorToSelectionStart;
     Mode.setMode(Insert);
   | "I" =>
     Movements.gotoLineHome();
     Mode.setMode(Insert);
   | "r" => Mode.setMode(Insert)
+  | "a" =>
+    editor |> Movements.moveCursorToSelectionEnd;
+    Mode.setMode(Insert);
   | "A" =>
     Movements.gotoLineEnd();
     Mode.setMode(Insert);

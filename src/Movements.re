@@ -62,3 +62,19 @@ let selectToLineStart = () => Vscode.Commands.selectToLineStart();
 let selectToLineEnd = () => Vscode.Commands.selectToLineEnd();
 let selectToFileStart = () => Vscode.Commands.selectToTop();
 let selectToFileEnd = () => Vscode.Commands.selectToBottom();
+
+let moveCursorToSelectionStart = (editor: Vscode.TextEditor.t) =>
+  editor
+  |> Vscode.TextEditor.getSelections
+  |> Array.map(~f=(s: Vscode.Selection.t) =>
+       Vscode.Selection.make(~anchor=s.start, ~active=s.start)
+     )
+  |> Vscode.TextEditor.setSelections(editor);
+
+let moveCursorToSelectionEnd = (editor: Vscode.TextEditor.t) =>
+  editor
+  |> Vscode.TextEditor.getSelections
+  |> Array.map(~f=(s: Vscode.Selection.t) =>
+       Vscode.Selection.make(~anchor=s.end_, ~active=s.end_)
+     )
+  |> Vscode.TextEditor.setSelections(editor);
