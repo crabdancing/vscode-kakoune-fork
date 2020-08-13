@@ -46,6 +46,58 @@ let handleGotoMode = (input: Vscode.textCommandArgs) => {
   toNormalMode();
 };
 
+let handleExtendSelectionsToCharacter =
+    (editor: Vscode.TextEditor.t, input: Vscode.textCommandArgs) => {
+  editor
+  |> Vscode.TextEditor.getSelections
+  |> Selections.extendSelectionFromActiveToCharacter(
+       ~setSelections=Vscode.TextEditor.setSelections(editor),
+       ~getTextLine=Vscode.TextDocument.getLineTextAt(_, editor.document),
+       ~character=input.text,
+     );
+
+  toNormalMode();
+};
+
+let handleSelectToCharacter =
+    (editor: Vscode.TextEditor.t, input: Vscode.textCommandArgs) => {
+  editor
+  |> Vscode.TextEditor.getSelections
+  |> Selections.selectFromActiveToCharacter(
+       ~setSelections=Vscode.TextEditor.setSelections(editor),
+       ~getTextLine=Vscode.TextDocument.getLineTextAt(_, editor.document),
+       ~character=input.text,
+     );
+
+  toNormalMode();
+};
+
+let handleExtendSelectionsOnCharacter =
+    (editor: Vscode.TextEditor.t, input: Vscode.textCommandArgs) => {
+  editor
+  |> Vscode.TextEditor.getSelections
+  |> Selections.extendSelectionFromActiveOnCharacter(
+       ~setSelections=Vscode.TextEditor.setSelections(editor),
+       ~getTextLine=Vscode.TextDocument.getLineTextAt(_, editor.document),
+       ~character=input.text,
+     );
+
+  toNormalMode();
+};
+
+let handleSelectOnCharacter =
+    (editor: Vscode.TextEditor.t, input: Vscode.textCommandArgs) => {
+  editor
+  |> Vscode.TextEditor.getSelections
+  |> Selections.selectFromActiveOnCharacter(
+       ~setSelections=Vscode.TextEditor.setSelections(editor),
+       ~getTextLine=Vscode.TextDocument.getLineTextAt(_, editor.document),
+       ~character=input.text,
+     );
+
+  toNormalMode();
+};
+
 let handleNormalMode =
     (editor: Vscode.TextEditor.t, input: Vscode.textCommandArgs) =>
   switch (input.text) {
@@ -80,6 +132,10 @@ let handleNormalMode =
     |> Selections.onlyPrimarySelection(
          ~setSelections=Vscode.TextEditor.setSelections(editor),
        )
+  | "t" => Mode.setMode(SelectToCharacter)
+  | "T" => Mode.setMode(ExtendSelectionsToCharacter)
+  | "f" => Mode.setMode(SelectOnCharacter)
+  | "F" => Mode.setMode(ExtendSelectionsOnCharacter)
   // Edits.
   | "d" => editor |> Edits.deleteSelections
   | "p" => editor |> Edits.pasteAfter
@@ -122,8 +178,6 @@ let handleNormalMode =
   };
 
 let onType = (args: Vscode.textCommandArgs) => {
-  args->Js.log;
-
   Vscode.Window.activeTextEditor()
   |> Option.tap(~f=e =>
        switch (Mode.getMode()) {
@@ -132,6 +186,12 @@ let onType = (args: Vscode.textCommandArgs) => {
        | MaybeExitInsert => args |> handleMaybeExitInsertMode
        | Goto => args |> handleGotoMode
        | GotoExtend => args |> handleGotoExtendMode
+       | SelectToCharacter => args |> handleSelectToCharacter(e)
+       | ExtendSelectionsToCharacter =>
+         args |> handleExtendSelectionsToCharacter(e)
+       | SelectOnCharacter => args |> handleSelectOnCharacter(e)
+       | ExtendSelectionsOnCharacter =>
+         args |> handleExtendSelectionsOnCharacter(e)
        }
      );
 };

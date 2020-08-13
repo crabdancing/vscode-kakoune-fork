@@ -3,7 +3,11 @@ type t =
   | Insert
   | MaybeExitInsert
   | Goto
-  | GotoExtend;
+  | GotoExtend
+  | SelectOnCharacter
+  | ExtendSelectionsOnCharacter
+  | SelectToCharacter
+  | ExtendSelectionsToCharacter;
 
 let mode = ref(Normal);
 

@@ -203,6 +203,11 @@ module TextDocument = {
     index >= 0 && index < document.lineCount
       ? Some(document.lineAt(index)) : None;
 
+  let getLineTextAt = (index, document) =>
+    document
+    |> getTextLine(index)
+    |> Option.map(~f=(tl: TextLine.t) => tl.text);
+
   let getAllTextLines = document =>
     List.range(document.lineCount)
     |> List.map(~f=index => document |> getTextLine(index))
