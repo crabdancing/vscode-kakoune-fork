@@ -1,6 +1,6 @@
 # Kakoune mode
 
-[Build status](https://builds.sr.ht/~reykjalin/vscode-kakoune)
+[![builds.sr.ht status](https://builds.sr.ht/~reykjalin/vscode-kakoune.svg)](https://builds.sr.ht/~reykjalin/vscode-kakoune?)
 
 _Please send bug reports and feature requests to the [mailing list](https://lists.sr.ht/~reykjalin/vscode-kakoune) via [~reykjalin/vscode-kakoune@lists.sr.ht](mailto:~reykjalin/vscode-kakoune@lists.sr.ht)._
 
@@ -9,16 +9,16 @@ _Please send bug reports and feature requests to the [mailing list](https://list
 # Table of Contents
 
 - [Keymappings](#keymappings)
-    - [Enter insert mode](#enter-insert-mode)
-    - [Movements and selections](#movements-and-selections)
-    - [Goto mode](#goto-mode)
-    - [Editing the file](#editing-the-file)
-    - [Searching for things to select](#searching-for-things-to-select)
+  - [Enter insert mode](#enter-insert-mode)
+  - [Movements and selections](#movements-and-selections)
+  - [Goto mode](#goto-mode)
+  - [Editing the file](#editing-the-file)
+  - [Searching for things to select](#searching-for-things-to-select)
 - [Differences between Kakoune and this plugin](#differences-between-kakoune-and-this-plugin)
 - [Motivation](#motivation)
 - [Why Reason?](#why-reason)
 - [Build Instructions](#build-instructions)
-    - [Script to paste into your shell of choice](#script-to-paste-into-your-shell-of-choice)
+  - [Script to paste into your shell of choice](#script-to-paste-into-your-shell-of-choice)
 - [Current functionality](#current-functionality)
 - [Upcoming functionality](#upcoming-functionality)
 
@@ -29,84 +29,85 @@ You can not type in normal mode, until you [enter insert mode](#enter-insert-mod
 
 ## Enter insert mode
 
-| Key | Effect |
-|----:|:-------|
-| `i` | Moves the cursor to the beginning of the selection and enters insert mode |
-| `I` | Moves the cursor to the start of the line and enters insert mode |
-| `a` | Moves the cursor to the end of the selection and enters insert mode |
-| `A` | Moves the cursor to the end of the line and enters insert mode |
+| Key | Effect                                                                                               |
+| --: | :--------------------------------------------------------------------------------------------------- |
+| `i` | Moves the cursor to the beginning of the selection and enters insert mode                            |
+| `I` | Moves the cursor to the start of the line and enters insert mode                                     |
+| `a` | Moves the cursor to the end of the selection and enters insert mode                                  |
+| `A` | Moves the cursor to the end of the line and enters insert mode                                       |
 | `o` | Creates a new empty line below the current selection, moves the cursor there, and enters insert mode |
 | `O` | Creates a new empty line above the current selection, moves the cursor there, and enters insert mode |
-| `r` | Enters insert mode without clearing the current selections |
-| `c` | Clears the current selection and enters insert mode |
+| `r` | Enters insert mode without clearing the current selections                                           |
+| `c` | Clears the current selection and enters insert mode                                                  |
 
 ## Movements and selections
 
-| Key | Effect |
-|----:|:-------|
-| `w` | Select the word to the right |
-| `W` | Extend selection one word to the right |
-| `b` | Select the word to the left |
-| `B` | Extend selection one word to the left |
-| `h` | Move caret left |
-| `H` | Extend selection one character to the right |
-| `j` | Move caret down |
-| `J` | Extend selection to the character below the caret |
-| `k` | Move caret up |
-| `K` | Extend selection to the character above the caret |
-| `l` | Move caret right |
-| `L` | Extend selection one character to the left |
-| `x` | Select the line the current selection is in. If a full line is currently selected, selects the line below the current selection |
-| `X` | Extend the selection to include the line below the current selection |
-| `g` | Enter [goto mode](#goto-mode)
-| `<space>` | Cancel all selections except the primary selection |
-| `;` | Reduce all selections to just the cursor |
-| `f` | Move the selection from the cursor on to the next instance of the provided character |
-| `F` | Extend the selection from the cursor on to the next instance of the provided character |
-| `t` | Move the selection from the cursor to the next instance of the provided character |
-| `T` | Extend the selection from the cursor to the next instance of the provided character |
+|       Key | Effect                                                                                                                          |
+| --------: | :------------------------------------------------------------------------------------------------------------------------------ |
+|       `w` | Select the word to the right                                                                                                    |
+|       `W` | Extend selection one word to the right                                                                                          |
+|       `b` | Select the word to the left                                                                                                     |
+|       `B` | Extend selection one word to the left                                                                                           |
+|       `h` | Move caret left                                                                                                                 |
+|       `H` | Extend selection one character to the right                                                                                     |
+|       `j` | Move caret down                                                                                                                 |
+|       `J` | Extend selection to the character below the caret                                                                               |
+|       `k` | Move caret up                                                                                                                   |
+|       `K` | Extend selection to the character above the caret                                                                               |
+|       `l` | Move caret right                                                                                                                |
+|       `L` | Extend selection one character to the left                                                                                      |
+|       `x` | Select the line the current selection is in. If a full line is currently selected, selects the line below the current selection |
+|       `X` | Extend the selection to include the line below the current selection                                                            |
+|       `C` | Extend the selection one line down                                                                                              |
+|       `g` | Enter [goto mode](#goto-mode)                                                                                                   |
+| `<space>` | Cancel all selections except the primary selection                                                                              |
+|       `;` | Reduce all selections to just the cursor                                                                                        |
+|       `f` | Move the selection from the cursor on to the next instance of the provided character                                            |
+|       `F` | Extend the selection from the cursor on to the next instance of the provided character                                          |
+|       `t` | Move the selection from the cursor to the next instance of the provided character                                               |
+|       `T` | Extend the selection from the cursor to the next instance of the provided character                                             |
 
 ## Goto mode
 
 When in goto mode you can quickly jump around the file.
 Pressing any button (even if it's not part of goto mode) will put you back in normal mode.
 
-| Key | Effect |
-|----:|:-------|
-| `h` | Move caret to the start of the line |
-| `H` | Extend selection to the start of the line |
-| `j` | Move caret to the bottom of the file |
+| Key | Effect                                     |
+| --: | :----------------------------------------- |
+| `h` | Move caret to the start of the line        |
+| `H` | Extend selection to the start of the line  |
+| `j` | Move caret to the bottom of the file       |
 | `J` | Extend selection to the bottom of the file |
-| `k` | Move caret to the start of the file |
-| `K` | Extend selection to the start of the file |
-| `l` | Move caret to the end of the line |
-| `L` | Extend selection to the end of the line |
+| `k` | Move caret to the start of the file        |
+| `K` | Extend selection to the start of the file  |
+| `l` | Move caret to the end of the line          |
+| `L` | Extend selection to the end of the line    |
 
 ## Editing the file
 
-| Key | Effect |
-|----:|:-------|
-| `d` | Cuts the current selections |
-| `y` | Copies the current selections |
-| `p` | Pastes from the clipboard after the current selection |
+| Key | Effect                                                 |
+| --: | :----------------------------------------------------- |
+| `d` | Cuts the current selections                            |
+| `y` | Copies the current selections                          |
+| `p` | Pastes from the clipboard after the current selection  |
 | `P` | Pastes from the clipboard before the current selection |
-| `u` | Undo |
-| `U` | Redo |
-| `>` | Increase indentation |
-| `<` | Decrease indentation |
+| `u` | Undo                                                   |
+| `U` | Redo                                                   |
+| `>` | Increase indentation                                   |
+| `<` | Decrease indentation                                   |
 
 ## Searching for things to select
 
-| Key | Effect |
-|----:|:-------|
+| Key | Effect                                                                             |
+| --: | :--------------------------------------------------------------------------------- |
 | `s` | Regex search the current selections and select every instance of text that matches |
-| `/` | Regex search the whole file and select every instance of text that matches |
+| `/` | Regex search the whole file and select every instance of text that matches         |
 
 # Differences between Kakoune and this plugin
 
 The goal is not to emulate Kakoune perfectly, but to emulate Kakoune using VSCode's default-ish behaviors.
 This is mostly done to make my life easy when implementing any features; I try to use VSCode's built in movements, selections, etc. instead of implementing my own.
-Doing  has several benefits:
+Doing has several benefits:
 
 1. The code is easier to understand.
 1. There is _way_ less code.
@@ -118,14 +119,14 @@ All of that said I'm very open to implementing some custom functionality if ther
 
 Just to make it easier to figure out what's actually different, here's a table with the documented differences:
 
-| Command | vscode-kakoune | Kakoune |
-|--------:|:---------------|:--------|
-| `h`/`j`/`k`/`l` | Moves the _cursor_ left/down/up/right. | Selects one character left/down/up/right. |
-| `p` | Pastes after the current selections. Does not restore selections. | Pastes after the current selections without affecting them.|
-| `P` | Pastes before the current selections. Does not restore selections. | Pastes before the current selections without affecting them. |
-| `d` | Deletes and copies all selections. | Deletes all selections, but only copies the first. |
-| `jk` (in insert mode) | Exits insert mode. | N/A |
-| `r` | Enters insert mode without clearing the selection. | Replaces every character in the selection with the character pressed after `r`. |
+|               Command | vscode-kakoune                                                     | Kakoune                                                                         |
+| --------------------: | :----------------------------------------------------------------- | :------------------------------------------------------------------------------ |
+|       `h`/`j`/`k`/`l` | Moves the _cursor_ left/down/up/right.                             | Selects one character left/down/up/right.                                       |
+|                   `p` | Pastes after the current selections. Does not restore selections.  | Pastes after the current selections without affecting them.                     |
+|                   `P` | Pastes before the current selections. Does not restore selections. | Pastes before the current selections without affecting them.                    |
+|                   `d` | Deletes and copies all selections.                                 | Deletes all selections, but only copies the first.                              |
+| `jk` (in insert mode) | Exits insert mode.                                                 | N/A                                                                             |
+|                   `r` | Enters insert mode without clearing the selection.                 | Replaces every character in the selection with the character pressed after `r`. |
 
 # Motivation
 
@@ -187,6 +188,6 @@ npm run build
 1. (Maybe) Handle pasting the same as Kakoune does.
 1. (Maybe) Handle replace mode the same as Kakoune.
 1. (Maybe) `:` commands, e.g. `:w` for saving, etc.
-    - Show pop up (Ctrl+P like menu) during search and `:` commands.
-        - Show suggestions from the Kakoune clippy in pop up.
+   - Show pop up (Ctrl+P like menu) during search and `:` commands.
+     - Show suggestions from the Kakoune clippy in pop up.
 1. (Maybe) Record macros.

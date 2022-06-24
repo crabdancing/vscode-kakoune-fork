@@ -41,6 +41,7 @@ let selectPreviousWord = (editor: Vscode.TextEditor.t) => {
 let extendPreviousWord = () => Vscode.Commands.selectWordStartLeft()
 
 let expandLineSelection = () => Vscode.Commands.expandLineSelection()
+let insertCursorBelow = () => Vscode.Commands.insertCursorBelow()
 
 let selectCurrentLine = () => {
   Vscode.Commands.cancelSelection()

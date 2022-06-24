@@ -110,6 +110,7 @@ module Commands = {
 
   let cancelSelection = () => "cancelSelection" |> executeCommand
   let expandLineSelection = () => "expandLineSelection" |> executeCommand
+  let insertCursorBelow = () => "editor.action.insertCursorBelow" |> executeCommand
 
   let moveCharacterRight = () => "cursorRight" |> executeCommand
   let selectCharacterRight = () => "cursorRightSelect" |> executeCommand
