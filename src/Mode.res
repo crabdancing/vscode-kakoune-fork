@@ -7,10 +7,10 @@ type t =
   | SelectOnCharacter
   | ExtendSelectionsOnCharacter
   | SelectToCharacter
-  | ExtendSelectionsToCharacter;
+  | ExtendSelectionsToCharacter
 
-let mode = ref(Normal);
+let mode = ref(Normal)
 
-let setMode = newMode => mode := newMode;
+let setMode = newMode => mode := newMode
 
-let getMode = () => mode^;
+let getMode = () => mode.contents
