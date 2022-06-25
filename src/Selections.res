@@ -7,9 +7,7 @@ let onlyActiveCursor = (~setSelections, selections: array<Vscode.Selection.t>): 
   |> setSelections
 
 let findCharacterInLineFromActivePosition = (~active: Vscode.Position.t, ~character, text) =>
-  String.sub(text, active.character, text |> String.length)
-  |> String.index_opt(_, character)
-  |> Belt.Option.map(_, i => i + active.character)
+  String.index_from_opt(text, active.character, character)
 
 let selectToCharacter = (~character, ~getTextLine, selection) => {
   let {active}: Vscode.Selection.t = selection
