@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.3.0]
+
+**New features**
+
+- Add: Use `C` to extend the current selections down one line in a square pattern.
+
+**Developer updates**
+
+- Build tooling updated.
+- Tablecloth dependency removed.
+
 ## [1.2.0]
 
 **New features**
