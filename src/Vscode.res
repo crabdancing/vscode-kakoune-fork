@@ -218,7 +218,7 @@ module TextEditor = {
     selection: Selection.t,
   }
 
-  @deriving(accessors)
+  @deriving({jsConverter: newType})
   type cursorStyle =
     | @as(1) Line
     | @as(2) Block
@@ -227,7 +227,7 @@ module TextEditor = {
     | @as(5) BlockOutline
     | @as(6) UnderlineThin
 
-  type textEditorOptions = {mutable cursorStyle: cursorStyle}
+  type textEditorOptions = {mutable cursorStyle: abs_cursorStyle}
 
   let options: unit => option<textEditorOptions> = () =>
     Js.toOption(vscode["window"]["activeTextEditor"]["options"])
@@ -278,7 +278,7 @@ let overrideCommand = (command, callback, context) => {
 let setCursorStyle = (style: TextEditor.cursorStyle) => {
   switch TextEditor.options() {
   | None => ()
-  | Some(o) => o.cursorStyle = style
+  | Some(o) => o.cursorStyle = TextEditor.cursorStyleToJs(style)
   }
 }
 

@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.3.1]
+
+_June 27, 2022_
+
+- Fix: Cursor is now a block in normal mode and a line in insert mode as intended.
+
 ## [1.3.0]
 
 **New features**
