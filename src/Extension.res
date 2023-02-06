@@ -114,8 +114,8 @@ let handleNormalMode = (editor: Vscode.TextEditor.t, input: Vscode.textCommandAr
   | "K" => Movements.extendLineUp()
   | "l" => Movements.moveCharacterRight()
   | "L" => Movements.extendCharacterRight()
-  | "x" => Movements.selectCurrentLine()
-  | "X" => Movements.expandLineSelection()
+  | "X" => Movements.selectCurrentLine()
+  | "x" => Movements.expandLineSelection()
   | "C" => Movements.insertCursorBelow()
   // Goto.
   | "g" => Mode.setMode(Goto)
