@@ -1,13 +1,12 @@
 # Kakoune mode
-
-[![builds.sr.ht status](https://builds.sr.ht/~reykjalin/vscode-kakoune.svg)](https://builds.sr.ht/~reykjalin/vscode-kakoune?)
-
 _Please send bug reports and feature requests to the [mailing list](https://lists.sr.ht/~reykjalin/vscode-kakoune) via [~reykjalin/vscode-kakoune@lists.sr.ht](mailto:~reykjalin/vscode-kakoune@lists.sr.ht)._
 
 `vscode-kakoune` emulates the input behavior of the [Kakoune](https://kakoune.org) text editor.
 
 # Table of Contents
 
+- [Kakoune mode](#kakoune-mode)
+- [Table of Contents](#table-of-contents)
 - [Keymappings](#keymappings)
   - [Enter insert mode](#enter-insert-mode)
   - [Movements and selections](#movements-and-selections)
@@ -17,7 +16,7 @@ _Please send bug reports and feature requests to the [mailing list](https://list
 - [Differences between Kakoune and this plugin](#differences-between-kakoune-and-this-plugin)
 - [Motivation](#motivation)
 - [Why Reason?](#why-reason)
-- [Build Instructions](#build-instructions)
+- [Build instructions](#build-instructions)
   - [Script to paste into your shell of choice](#script-to-paste-into-your-shell-of-choice)
 - [Current functionality](#current-functionality)
 - [Upcoming functionality](#upcoming-functionality)
